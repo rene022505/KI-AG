@@ -1,22 +1,23 @@
 package Squares;
 
-public class SquareSolving extends Square {
+public class SolvingSquare {
 
 	/**
-	 * Class for solving the maze Extends the Squares.Square class and adds booleans
+	 * Class for solving the maze. Square class and adds booleans
 	 * for memorizing which path already was used
 	 */
 	public boolean visitedSolving = false;
 
-	public Square self;
+	public int xIndex, yIndex;
 
 	/**
 	 * Constructor which copies the representative square
 	 *
 	 * @param s Squares.Square object
 	 */
-	public SquareSolving(Square s) {
-		this.self = s;
+	public SolvingSquare(int pX, int pY) {
+		this.xIndex = pX;
+		this.yIndex = pY;
 	}
 
 }

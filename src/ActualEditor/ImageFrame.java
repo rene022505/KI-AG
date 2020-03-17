@@ -17,7 +17,7 @@ class ImageFrame extends javax.swing.JPanel {
 	protected void paintComponent(Graphics g) {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, 701, 701);
-		Drawing.drawImage(g);
+		Drawing.drawImage(g, false);
 	}
 
 }

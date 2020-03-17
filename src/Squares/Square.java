@@ -5,20 +5,27 @@ import java.awt.*;
 public class Square {
 
 	/**
-	 * Class representing the individual squares in the mae
-	 * <p>
-	 * Squares.Square as bit 00ab cdef: 0 - start (will be changed since always
-	 * starts at top left) 0 - finish a - part of solve path b - has been visited c
-	 * - top wall (0 wall, 1 no wall) d - right wall (0 wall, 1 no wall) e - bottom
-	 * wall (0 wall, 1 no wall) f - left wall (0 wall, 1 no wall)
+	 * Class representing the individual squares in the maze
+	 * Squares.Square as bit 00ab cdef: 
+	 * 0 - start (will be changed since always starts at top left) 
+	 * 0 - finish (will be changed since always finishes at bottom right) 
+	 * a - part of solve path 
+	 * b - has been visited 
+	 * c - top wall (0 wall, 1 no wall) 
+	 * d - right wall (0 wall, 1 no wall) 
+	 * e - bottom wall (0 wall, 1 no wall) 
+	 * f - left wall (0 wall, 1 no wall)
 	 */
+	
+	// TODO:
+	/* MAJOR CHANGE IN GENERATION WITH CUSTOM START AND FINISH COULD HAPPEN */
 
 	public boolean[] walls = { true, true, true, true }; // true = wall, false = no wall
 	public int x, y;
 	public boolean visited = false;
 	public boolean solve = false;
-	public boolean isStart = false;
-	public boolean isFinish = false;
+	public boolean isStart = false; // Will be removed soon
+	public boolean isFinish = false; // Could be removed too
 
 	/**
 	 * Removes the top wall of the square

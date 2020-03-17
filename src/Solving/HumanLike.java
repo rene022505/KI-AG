@@ -1,5 +1,7 @@
 package Solving;
 
+import java.awt.Graphics;
+
 public class HumanLike {
 
 	/**
@@ -8,8 +10,9 @@ public class HumanLike {
 
 	/**
 	 * Will be the main solving function
+	 * @param g Graphics object
 	 */
-	public static void solve() {
+	public static void solve(Graphics g) {
 		// TODO
 		System.out.println("Solving.HumanLike.solve()");
 	}

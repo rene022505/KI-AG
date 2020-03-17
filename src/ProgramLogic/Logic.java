@@ -1,15 +1,15 @@
 package ProgramLogic;
 
 import javax.swing.*;
+
+import DataHolder.DataHolder;
+
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Stack;
-
 import Squares.Square;
-import Squares.SquareSolving;
+import Squares.SolvingSquare;
 
 public class Logic {
 
@@ -20,10 +20,6 @@ public class Logic {
 	private static String filePath;
 
 	private static byte[][] file = new byte[70][70];
-
-	public static Square[][] squares = new Square[70][70];
-	public static ArrayList<Square> neighbourSquares = new ArrayList<>();
-	public static Stack<Square> squareStack = new Stack<>();
 
 	/**
 	 * Heart of all the logic, starts parsing the file from primary storage into RAM
@@ -62,21 +58,21 @@ public class Logic {
 		for (int y = 0; y < 70; y++) {
 			for (int x = 0; x < 70; x++) {
 				b = 0x00;
-				if (squares[x][y].isStart)
+				if (DataHolder.squares[x][y].isStart)
 					b |= 0x80;
-				if (squares[x][y].isFinish)
+				if (DataHolder.squares[x][y].isFinish)
 					b |= 0x40;
-				if (squares[x][y].solve)
+				if (DataHolder.squares[x][y].solve)
 					b |= 0x20;
-				if (squares[x][y].visited)
+				if (DataHolder.squares[x][y].visited)
 					b |= 0x10;
-				if (!squares[x][y].walls[0])
+				if (!DataHolder.squares[x][y].walls[0])
 					b |= 0x08;
-				if (!squares[x][y].walls[1])
+				if (!DataHolder.squares[x][y].walls[1])
 					b |= 0x04;
-				if (!squares[x][y].walls[2])
+				if (!DataHolder.squares[x][y].walls[2])
 					b |= 0x02;
-				if (!squares[x][y].walls[3])
+				if (!DataHolder.squares[x][y].walls[3])
 					b |= 0x01;
 				file[x][y] = b;
 			}
@@ -91,27 +87,17 @@ public class Logic {
 		for (int y = 0; y < 70; y++) {
 			for (int x = 0; x < 70; x++) {
 				s = new Square();
-				if ((file[x][y] & 0x80) == 0x80)
-					s.isStart = true;
-				if ((file[x][y] & 0x40) == 0x40)
-					s.isFinish = true;
-				if ((file[x][y] & 0x20) == 0x20) // solve bit
-					s.solve = true;
-				if ((file[x][y] & 0x10) == 0x10) // visited bit
-					s.visited = true;
-				if ((file[x][y] & 0x08) == 0x08) // top wall
-					s.walls[0] = false;
-				if ((file[x][y] & 0x04) == 0x04) // right wall
-					s.walls[1] = false;
-				if ((file[x][y] & 0x02) == 0x02) // bottom wall
-					s.walls[2] = false;
-				if ((file[x][y] & 0x01) == 0x01) // left wall
-					s.walls[3] = false;
+				s.solve = (file[x][y] & 0x20) == 0x20;
+				s.visited = (file[x][y] & 0x10) == 0x10;
+				s.walls[0] = (file[x][y] & 0x08) != 0x08;
+				s.walls[1] = (file[x][y] & 0x04) != 0x04;
+				s.walls[2] = (file[x][y] & 0x02) != 0x02;
+				s.walls[3] = (file[x][y] & 0x01) != 0x01;
 
 				s.x = x * 10;
 				s.y = y * 10;
 
-				squares[x][y] = s;
+				DataHolder.squares[x][y] = s;
 			}
 		}
 	}
@@ -123,11 +109,11 @@ public class Logic {
 	 *
 	 * @return Squares.SquareSolving array
 	 */
-	public static SquareSolving[][] generateSquareSolve() {
-		SquareSolving[][] sv = new SquareSolving[70][70];
+	public static SolvingSquare[][] generateSquareSolve() {
+		SolvingSquare[][] sv = new SolvingSquare[70][70];
 		for (int y = 0; y < 70; y++)
 			for (int x = 0; x < 70; x++)
-				sv[x][y] = new SquareSolving(Logic.squares[x][y]);
+				sv[x][y] = new SolvingSquare(x, y);
 		return sv;
 	}
 

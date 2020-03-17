@@ -21,7 +21,7 @@ public class ActualEditor extends JFrame {
 
 	private boolean changed = false;
 	private String filename;
-	boolean vG, vS;
+	boolean genVis, solVis;
 
 	JPanel panel = new ImageFrame();
 	JPopupMenu solveMenu;
@@ -85,6 +85,12 @@ public class ActualEditor extends JFrame {
 		humanLike.setName("humanLike");
 		humanLike.addActionListener(e -> solveButtonActionPerformed(humanLike));
 		solveMenu.add(humanLike);
+		
+		JMenuItem quantumLike = new JMenuItem();
+		quantumLike.setText("Quantum computer like");
+		quantumLike.setName("quantumLike");
+		quantumLike.addActionListener(e -> solveButtonActionPerformed(quantumLike));
+		solveMenu.add(quantumLike);
 
 		JButton solveButton = new JButton();
 		solveButton.setBounds(0, 0, 70, 20);
@@ -202,8 +208,8 @@ public class ActualEditor extends JFrame {
 	 */
 	public void visualizeGenerationCheckBoxActionPerformed(ActionEvent ae) {
 		AbstractButton abstractButton = (AbstractButton) ae.getSource();
-		vG = abstractButton.getModel().isSelected();
-		if (vG)
+		genVis = abstractButton.getModel().isSelected();
+		if (genVis)
 			JOptionPane.showMessageDialog(null, "Not yet implemented properly", "LazyDevException",
 					JOptionPane.ERROR_MESSAGE);
 	}
@@ -215,8 +221,8 @@ public class ActualEditor extends JFrame {
 	 */
 	public void visualizeSolvingCheckBoxActionPerformed(ActionEvent ae) {
 		AbstractButton abstractButton = (AbstractButton) ae.getSource();
-		vS = abstractButton.getModel().isSelected();
-		if (vS)
+		solVis = abstractButton.getModel().isSelected();
+		if (solVis)
 			JOptionPane.showMessageDialog(null, "Not yet implemented properly", "LazyDevException",
 					JOptionPane.ERROR_MESSAGE);
 	}
@@ -241,7 +247,7 @@ public class ActualEditor extends JFrame {
 	 */
 	public void solveButtonActionPerformed(JMenuItem ji) {
 		if (hasMaze)
-			GeneralSolving.selectSolve(ji.getName(), panel.getGraphics());
+			GeneralSolving.selectSolve(ji.getName(), panel.getGraphics(), solVis);
 		else
 			JOptionPane.showMessageDialog(this, "Nothing to solve", "NothingToSolve Error", JOptionPane.ERROR_MESSAGE);
 	}
@@ -252,7 +258,7 @@ public class ActualEditor extends JFrame {
 	 * @param evt Action event
 	 */
 	public void generateButtonActionPerformed(ActionEvent evt) {
-		Generating.generateMaze(panel.getGraphics(), vG);
+		Generating.generateMaze(panel.getGraphics(), genVis);
 		changed = true;
 		hasMaze = true;
 		setTitle("Editor.Editor: " + this.filename + " - unsaved work");

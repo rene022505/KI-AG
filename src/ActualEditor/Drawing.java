@@ -1,8 +1,8 @@
 package ActualEditor;
 
-import ProgramLogic.Logic;
-
 import java.awt.*;
+
+import DataHolder.DataHolder;
 
 public class Drawing {
 
@@ -14,16 +14,17 @@ public class Drawing {
 	 * Prints the maze onto the screen
 	 * 
 	 * @param g Graphics object
+	 * @param genVis boolean visualize generation
 	 */
-	public static void drawImage(Graphics g) {
+	public static void drawImage(Graphics g, boolean genVis) {
 		// draws the actual image
 		for (int y = 0; y < 70; y++) {
 			for (int x = 0; x < 70; x++) {
 				// TODO: Add visualizing
 				allWalls(g, x, y);
-				if (Logic.squares[x][y].solve) {
+				if (DataHolder.squares[x][y].solve) {
 					parseWallsSolve(g, x, y);
-				} else if (Logic.squares[x][y].visited) {
+				} else if (DataHolder.squares[x][y].visited) {
 					parseWalls(g, x, y);
 				}
 			}
@@ -40,11 +41,11 @@ public class Drawing {
 	static void allWalls(Graphics g, int x, int y) {
 		g.setColor(Color.BLACK);
 		g.drawRect(x * 10, y * 10, 10, 10);
-		if (Logic.squares[x][y].isStart) {
+		if (DataHolder.squares[x][y].isStart) {
 			g.setColor(Color.RED);
 			g.fillRect(x * 10 + 1, y * 10 + 1, 9, 9);
 			g.setColor(Color.WHITE);
-		} else if (Logic.squares[x][y].isFinish) {
+		} else if (DataHolder.squares[x][y].isFinish) {
 			g.setColor(Color.ORANGE);
 			g.fillRect(x * 10 + 1, y * 10 + 1, 9, 9);
 			g.setColor(Color.WHITE);
@@ -64,8 +65,8 @@ public class Drawing {
 	 */
 	private static void parseWallsSolve(Graphics g, int x, int y) {
 		g.setColor(Color.GREEN);
-		g.fillRect(Logic.squares[x][y].x + 1, Logic.squares[x][y].y + 1, Logic.squares[x][y].x + 9,
-				Logic.squares[x][y].y + 9);
+		g.fillRect(DataHolder.squares[x][y].x + 1, DataHolder.squares[x][y].y + 1, DataHolder.squares[x][y].x + 9,
+				DataHolder.squares[x][y].y + 9);
 		parseWalls(g, x, y);
 	}
 
@@ -77,14 +78,13 @@ public class Drawing {
 	 * @param y y-coordinate of object
 	 */
 	private static void parseWalls(Graphics g, int x, int y) {
-		g.setColor(Color.WHITE);
-		if (!Logic.squares[x][y].walls[0])
-			Logic.squares[x][y].removeTop(g);
-		if (!Logic.squares[x][y].walls[1])
-			Logic.squares[x][y].removeRight(g);
-		if (!Logic.squares[x][y].walls[2])
-			Logic.squares[x][y].removeBottom(g);
-		if (!Logic.squares[x][y].walls[3])
-			Logic.squares[x][y].removeLeft(g);
+		if (!DataHolder.squares[x][y].walls[0])
+			DataHolder.squares[x][y].removeTop(g);
+		if (!DataHolder.squares[x][y].walls[1])
+			DataHolder.squares[x][y].removeRight(g);
+		if (!DataHolder.squares[x][y].walls[2])
+			DataHolder.squares[x][y].removeBottom(g);
+		if (!DataHolder.squares[x][y].walls[3])
+			DataHolder.squares[x][y].removeLeft(g);
 	}
 }
