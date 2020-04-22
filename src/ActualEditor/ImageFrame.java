@@ -2,6 +2,8 @@ package ActualEditor;
 
 import java.awt.*;
 
+import DataHolder.DataHolder;
+
 @SuppressWarnings("serial")
 class ImageFrame extends javax.swing.JPanel {
 	/**
@@ -16,7 +18,7 @@ class ImageFrame extends javax.swing.JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		g.setColor(Color.WHITE);
-		g.fillRect(0, 0, 701, 701);
+		g.fillRect(0, 0, DataHolder.panelSize + 1, DataHolder.panelSize + 1);
 		Drawing.drawImage(g, false);
 	}
 

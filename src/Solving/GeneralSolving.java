@@ -7,7 +7,6 @@ import ActualEditor.Drawing;
 import DataHolder.DataHolder;
 import DataHolder.SolveMode;
 import Squares.SolvingSquare;
-import ProgramLogic.Logic;
 
 public class GeneralSolving {
 
@@ -21,7 +20,7 @@ public class GeneralSolving {
 	 * @param s Squares.SquareSolving two dimensional array
 	 */
 	public static void init(SolvingSquare[][] s) {
-		DataHolder.solvingSquareArray = s;
+		DataHolder.solvingSquares = s;
 	} // create SquareSolve array
 
 	/**
@@ -32,24 +31,24 @@ public class GeneralSolving {
 	 * @return unvisited neighbour array list
 	 */
 	static int checkOptions(int x, int y) {
-		DataHolder.squareNeighbours.clear();
+		DataHolder.neighbourSolvingSquares.clear();
 		if (!DataHolder.squares[x][y].walls[3]) // check if left wall is gone
 			if (x - 1 >= 0) // check if already went to the left
-				if (!DataHolder.solvingSquareArray[x - 1][y].visitedSolving)
-					DataHolder.squareNeighbours.add(DataHolder.solvingSquareArray[x - 1][y]);
+				if (!DataHolder.solvingSquares[x - 1][y].visitedSolving)
+					DataHolder.neighbourSolvingSquares.add(DataHolder.solvingSquares[x - 1][y]);
 		if (!DataHolder.squares[x][y].walls[0]) // check if top wall is gone
 			if (y - 1 >= 0) // check if already went to the top
-				if (!DataHolder.solvingSquareArray[x][y - 1].visitedSolving)
-					DataHolder.squareNeighbours.add(DataHolder.solvingSquareArray[x][y - 1]);
+				if (!DataHolder.solvingSquares[x][y - 1].visitedSolving)
+					DataHolder.neighbourSolvingSquares.add(DataHolder.solvingSquares[x][y - 1]);
 		if (!DataHolder.squares[x][y].walls[1]) // check if right wall is gone
-			if (x + 1 < 70) // check if already went to the right
-				if (!DataHolder.solvingSquareArray[x + 1][y].visitedSolving)
-					DataHolder.squareNeighbours.add(DataHolder.solvingSquareArray[x + 1][y]);
+			if (x + 1 < DataHolder.gridSize) // check if already went to the right
+				if (!DataHolder.solvingSquares[x + 1][y].visitedSolving)
+					DataHolder.neighbourSolvingSquares.add(DataHolder.solvingSquares[x + 1][y]);
 		if (!DataHolder.squares[x][y].walls[2]) // check if bottom wall is gone
-			if (y + 1 < 70) // check if already went to the bottom
-				if (!DataHolder.solvingSquareArray[x][y + 1].visitedSolving)
-					DataHolder.squareNeighbours.add(DataHolder.solvingSquareArray[x][y + 1]);
-		return DataHolder.squareNeighbours.size();
+			if (y + 1 < DataHolder.gridSize) // check if already went to the bottom
+				if (!DataHolder.solvingSquares[x][y + 1].visitedSolving)
+					DataHolder.neighbourSolvingSquares.add(DataHolder.solvingSquares[x][y + 1]);
+		return DataHolder.neighbourSolvingSquares.size();
 	}
 
 	/**
@@ -60,7 +59,9 @@ public class GeneralSolving {
 	 */
 	public static void selectSolve(String method, Graphics g, boolean vis) { 
 		// TODO implement visualize
-		init(Logic.generateSquareSolve());
+		for (int y = 0; y < DataHolder.gridSize; y++)
+			for (int x = 0; x < DataHolder.gridSize; x++)
+				DataHolder.solvingSquares[x][y] = new SolvingSquare(x, y);
 		switch (method) {
 		case "alwaysLeft":
 			AlwaysLeft.solve(g);
@@ -68,8 +69,8 @@ public class GeneralSolving {
 		case "randomDir":
 			RandomDir.solve(g);
 			break;
-		case "humanLike":
-			HumanLike.solve(g);
+		case "trueAlwaysLeft":
+			TrueAlwaysLeft.solve(g);
 			break;
 		case "quantumLike":
 			QuantumLike.solve(g);
@@ -82,24 +83,29 @@ public class GeneralSolving {
 	 * @param g Graphics object
 	 */
 	public static void multiPurpose(Enum<SolveMode> e, Graphics g) {
-		SolvingSquare current = DataHolder.solvingSquareArray[0][0];
+		SolvingSquare current = DataHolder.solvingSquares[0][0];
 		current.visitedSolving = true;
 		DataHolder.solvingSquareStack.push(current);
 
 		int x, y, neighbourCount;
 		boolean br = false;
-
+		
 		while (!DataHolder.solvingSquareStack.empty()) {
-			x = current.xIndex;
-			y = current.yIndex;
-
+			x = current.absolueX;
+			y = current.absoluteY;
+			
 			neighbourCount = GeneralSolving.checkOptions(x, y);
 			while (neighbourCount == 0) {
-				DataHolder.squares[x][y].solve = false;
+				if ((x == DataHolder.gridSize - 1) && (y == DataHolder.gridSize - 1)) {
+					br = true;
+					break;
+				} else
+					DataHolder.squares[x][y].solve = false;
+				
 				if (!DataHolder.solvingSquareStack.empty()) {
 					current = DataHolder.solvingSquareStack.pop();
-					x = current.xIndex;
-					y = current.yIndex;
+					x = current.absolueX;
+					y = current.absoluteY;
 					neighbourCount = GeneralSolving.checkOptions(x, y);
 				} else {
 					br = true;
@@ -113,12 +119,12 @@ public class GeneralSolving {
 			DataHolder.solvingSquareStack.push(current);
 
 			if (e == SolveMode.RandomDir)
-				current = DataHolder.squareNeighbours.get(new Random().nextInt(DataHolder.squareNeighbours.size()));
+				current = DataHolder.neighbourSolvingSquares.get(new Random().nextInt(DataHolder.neighbourSolvingSquares.size()));
 			else if (e == SolveMode.AlwaysLeft)
-				current = DataHolder.squareNeighbours.get(0);
+				current = DataHolder.neighbourSolvingSquares.get(0);
 			
 			current.visitedSolving = true;
-			if (DataHolder.squares[x][y].isFinish)
+			if (x + y == (DataHolder.gridSize - 1) * 2)
 				break;
 			else
 				if (!(x == 0 && y == 0))

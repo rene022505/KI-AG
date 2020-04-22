@@ -10,6 +10,8 @@ import java.awt.event.*;
 
 import javax.swing.*;
 
+import DataHolder.DataHolder;
+
 @SuppressWarnings("serial")
 public class ActualEditor extends JFrame {
 
@@ -80,11 +82,11 @@ public class ActualEditor extends JFrame {
 		randomDir.addActionListener(e -> solveButtonActionPerformed(randomDir));
 		solveMenu.add(randomDir);
 
-		JMenuItem humanLike = new JMenuItem();
-		humanLike.setText("Human like");
-		humanLike.setName("humanLike");
-		humanLike.addActionListener(e -> solveButtonActionPerformed(humanLike));
-		solveMenu.add(humanLike);
+		JMenuItem trueAlwaysLeft = new JMenuItem();
+		trueAlwaysLeft.setText("True Always Left");
+		trueAlwaysLeft.setName("trueAlwaysLeft");
+		trueAlwaysLeft.addActionListener(e -> solveButtonActionPerformed(trueAlwaysLeft));
+		solveMenu.add(trueAlwaysLeft);
 		
 		JMenuItem quantumLike = new JMenuItem();
 		quantumLike.setText("Quantum computer like");
@@ -131,8 +133,12 @@ public class ActualEditor extends JFrame {
 		optionsButton.setMargin(new Insets(2, 2, 2, 2));
 		optionsButton.addActionListener(this::optionsButtonActionPerformed);
 		menuBar.add(optionsButton);
+		
+		JTextField gridSize = new JTextField();
+		gridSize.setBounds(0, 0, 150, 20);
+		menuBar.add(gridSize);
 
-		panel.setBounds(28, 15, 701, 701);
+		panel.setBounds(28, 15, DataHolder.panelSize + 1, DataHolder.panelSize + 1);
 		panel.setOpaque(true);
 		cp.add(panel);
 
@@ -246,8 +252,11 @@ public class ActualEditor extends JFrame {
 	 * @param ji JMenuItem to distinguish different options
 	 */
 	public void solveButtonActionPerformed(JMenuItem ji) {
-		if (hasMaze)
+		if (hasMaze) {
 			GeneralSolving.selectSolve(ji.getName(), panel.getGraphics(), solVis);
+			setTitle("Editor.Editor: " + this.filename + " - unsaved work");
+			changed = true;
+		}
 		else
 			JOptionPane.showMessageDialog(this, "Nothing to solve", "NothingToSolve Error", JOptionPane.ERROR_MESSAGE);
 	}

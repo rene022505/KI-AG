@@ -7,9 +7,11 @@ import DataHolder.DataHolder;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.File;
 import java.io.IOException;
-import Squares.Square;
+
 import Squares.SolvingSquare;
+import Squares.Square;
 
 public class Logic {
 
@@ -19,7 +21,7 @@ public class Logic {
 
 	private static String filePath;
 
-	private static byte[][] file = new byte[70][70];
+	private static byte[][] file = new byte[DataHolder.gridSize][DataHolder.gridSize];
 
 	/**
 	 * Heart of all the logic, starts parsing the file from primary storage into RAM
@@ -30,9 +32,16 @@ public class Logic {
 		filePath = fP;
 
 		try {
+			File f = new File(fP);
+			DataHolder.gridSize = (int) Math.sqrt(f.length());
+			DataHolder.squareSize = DataHolder.panelSize / DataHolder.gridSize;
+			file = new byte[DataHolder.gridSize][DataHolder.gridSize];
+			DataHolder.solvingSquares = new SolvingSquare[DataHolder.gridSize][DataHolder.gridSize];
+			DataHolder.squares = new Square[DataHolder.gridSize][DataHolder.gridSize];
+
 			FileInputStream iStream = new FileInputStream(fP);
-			for (int y = 0; y < 70; y++) {
-				for (int x = 0; x < 70; x++) {
+			for (int y = 0; y < DataHolder.gridSize; y++) {
+				for (int x = 0; x < DataHolder.gridSize; x++) {
 					file[x][y] = iStream.readNBytes(1)[0];
 				}
 			}
@@ -46,6 +55,7 @@ public class Logic {
 		}
 
 		parseSquareFromFile();
+		
 	}
 
 	// --- PARSING ---
@@ -55,8 +65,8 @@ public class Logic {
 	 */
 	static void parseFileFromSquares() {
 		byte b;
-		for (int y = 0; y < 70; y++) {
-			for (int x = 0; x < 70; x++) {
+		for (int y = 0; y < DataHolder.gridSize; y++) {
+			for (int x = 0; x < DataHolder.gridSize; x++) {
 				b = 0x00;
 				if (DataHolder.squares[x][y].isStart)
 					b |= 0x80;
@@ -84,9 +94,11 @@ public class Logic {
 	 */
 	static void parseSquareFromFile() {
 		Square s;
-		for (int y = 0; y < 70; y++) {
-			for (int x = 0; x < 70; x++) {
+		for (int y = 0; y < DataHolder.gridSize; y++) {
+			for (int x = 0; x < DataHolder.gridSize; x++) {
 				s = new Square();
+				s.isStart = (file[x][y] & 0x80) == 0x80;
+				s.isFinish = (file[x][y] & 0x40) == 0x40;
 				s.solve = (file[x][y] & 0x20) == 0x20;
 				s.visited = (file[x][y] & 0x10) == 0x10;
 				s.walls[0] = (file[x][y] & 0x08) != 0x08;
@@ -94,8 +106,10 @@ public class Logic {
 				s.walls[2] = (file[x][y] & 0x02) != 0x02;
 				s.walls[3] = (file[x][y] & 0x01) != 0x01;
 
-				s.x = x * 10;
-				s.y = y * 10;
+				s.x = (int) (x * DataHolder.squareSize);
+				s.y = (int) (y * DataHolder.squareSize);
+				s.absoluteX = x;
+				s.absoluteY = y;
 
 				DataHolder.squares[x][y] = s;
 			}
@@ -103,19 +117,6 @@ public class Logic {
 	}
 
 	// --- END PARSING ---
-
-	/**
-	 * Generates a two dimensional Squares.SquareSolving array for solving
-	 *
-	 * @return Squares.SquareSolving array
-	 */
-	public static SolvingSquare[][] generateSquareSolve() {
-		SolvingSquare[][] sv = new SolvingSquare[70][70];
-		for (int y = 0; y < 70; y++)
-			for (int x = 0; x < 70; x++)
-				sv[x][y] = new SolvingSquare(x, y);
-		return sv;
-	}
 
 	/**
 	 * Is invoked when clicking the save button, calls parseFileFromSquares() and
@@ -126,8 +127,8 @@ public class Logic {
 
 		try {
 			FileOutputStream oStream = new FileOutputStream(filePath);
-			for (int y = 0; y < 70; y++) {
-				for (int x = 0; x < 70; x++) {
+			for (int y = 0; y < DataHolder.gridSize; y++) {
+				for (int x = 0; x < DataHolder.gridSize; x++) {
 					oStream.write(file[x][y]);
 				}
 			}

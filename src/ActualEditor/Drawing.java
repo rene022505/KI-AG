@@ -18,8 +18,8 @@ public class Drawing {
 	 */
 	public static void drawImage(Graphics g, boolean genVis) {
 		// draws the actual image
-		for (int y = 0; y < 70; y++) {
-			for (int x = 0; x < 70; x++) {
+		for (int y = 0; y < DataHolder.gridSize; y++) {
+			for (int x = 0; x < DataHolder.gridSize; x++) {
 				// TODO: Add visualizing
 				allWalls(g, x, y);
 				if (DataHolder.squares[x][y].solve) {
@@ -29,6 +29,8 @@ public class Drawing {
 				}
 			}
 		}
+		g.setColor(Color.BLACK);
+		g.drawRect(0, 0, 700, 700);
 	}
 
 	/**
@@ -40,18 +42,18 @@ public class Drawing {
 	 */
 	static void allWalls(Graphics g, int x, int y) {
 		g.setColor(Color.BLACK);
-		g.drawRect(x * 10, y * 10, 10, 10);
+		g.drawRect(x * (int) DataHolder.squareSize, y * (int) DataHolder.squareSize, (int) DataHolder.squareSize, (int) DataHolder.squareSize);
 		if (DataHolder.squares[x][y].isStart) {
 			g.setColor(Color.RED);
-			g.fillRect(x * 10 + 1, y * 10 + 1, 9, 9);
+			g.fillRect(x * (int) DataHolder.squareSize + 1, y * (int) DataHolder.squareSize + 1, (int) DataHolder.squareSize - 1, (int) DataHolder.squareSize - 1);
 			g.setColor(Color.WHITE);
 		} else if (DataHolder.squares[x][y].isFinish) {
 			g.setColor(Color.ORANGE);
-			g.fillRect(x * 10 + 1, y * 10 + 1, 9, 9);
+			g.fillRect(x * (int) DataHolder.squareSize + 1, y * (int) DataHolder.squareSize + 1, (int) DataHolder.squareSize - 1, (int) DataHolder.squareSize - 1);
 			g.setColor(Color.WHITE);
 		} else {
 			g.setColor(Color.WHITE);
-			g.fillRect(x * 10 + 1, y * 10 + 1, 9, 9);
+			g.fillRect(x * (int) DataHolder.squareSize + 1, y * (int) DataHolder.squareSize + 1, (int) DataHolder.squareSize - 1, (int) DataHolder.squareSize - 1);
 		}
 	}
 
@@ -65,8 +67,8 @@ public class Drawing {
 	 */
 	private static void parseWallsSolve(Graphics g, int x, int y) {
 		g.setColor(Color.GREEN);
-		g.fillRect(DataHolder.squares[x][y].x + 1, DataHolder.squares[x][y].y + 1, DataHolder.squares[x][y].x + 9,
-				DataHolder.squares[x][y].y + 9);
+		g.fillRect((int) DataHolder.squares[x][y].x + 1, (int) DataHolder.squares[x][y].y + 1, (int) DataHolder.squares[x][y].x + (int) DataHolder.squareSize - 1,
+				(int) DataHolder.squares[x][y].y + (int) DataHolder.squareSize - 1);
 		parseWalls(g, x, y);
 	}
 

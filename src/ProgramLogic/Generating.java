@@ -24,8 +24,8 @@ public class Generating {
 	 */
 	public static void generateMaze(Graphics g, boolean genVis) {
 		// Reset entire maze to default
-		for (int y = 0; y < 70; y++) {
-			for (int x = 0; x < 70; x++) {
+		for (int y = 0; y < DataHolder.gridSize; y++) {
+			for (int x = 0; x < DataHolder.gridSize; x++) {
 				DataHolder.squares[x][y].walls = new boolean[] { true, true, true, true };
 				DataHolder.squares[x][y].visited = false;
 				DataHolder.squares[x][y].solve = false;
@@ -36,7 +36,7 @@ public class Generating {
 
 		// Set first and last square to start and finish
 		DataHolder.squares[0][0].isStart = true;
-		DataHolder.squares[69][69].isFinish = true;
+		DataHolder.squares[DataHolder.gridSize - 1][DataHolder.gridSize - 1].isFinish = true;
 
 		// Read wikipedia maze generation recursive backtracking to understand the
 		// following
@@ -51,7 +51,7 @@ public class Generating {
 		while (!DataHolder.squareStack.empty()) { // Step 2
 			current = DataHolder.squareStack.pop(); // Step 2.1
 
-			help = neighbours(current.x / 10, current.y / 10); // Step 2.2
+			help = neighbours(current.absoluteX, current.absoluteY); // Step 2.2
 			neighbour = r.nextInt(help != 0 ? help : 1);
 
 			if (DataHolder.neighbourSquares.size() != 0)
@@ -63,7 +63,7 @@ public class Generating {
 						break;
 					}
 					current = DataHolder.squareStack.pop();
-					help = neighbours(current.x / 10, current.y / 10);
+					help = neighbours(current.absoluteX, current.absoluteY);
 					neighbour = r.nextInt(help != 0 ? help : 1);
 				}
 
@@ -74,13 +74,13 @@ public class Generating {
 			Square previous = current; // Step 2.2.2
 			current = DataHolder.neighbourSquares.get(neighbour);
 
-			if (previous.x - current.x > 0) { // Step 2.2.3
+			if (previous.absoluteX - current.absoluteX > 0) { // Step 2.2.3
 				previous.removeLeftBool();
 				current.removeRightBool();
-			} else if (previous.x - current.x < 0) {
+			} else if (previous.absoluteX - current.absoluteX < 0) {
 				current.removeLeftBool();
 				previous.removeRightBool();
-			} else if (previous.y - current.y < 0) {
+			} else if (previous.absoluteY - current.absoluteY < 0) {
 				current.removeTopBool();
 				previous.removeBottomBool();
 			} else {
@@ -111,10 +111,10 @@ public class Generating {
 		if (y - 1 >= 0) // check if neighbour on top is available
 			if (!DataHolder.squares[x][y - 1].visited)
 				DataHolder.neighbourSquares.add(DataHolder.squares[x][y - 1]);
-		if (x + 1 < 70) // check if neighbour right is available
+		if (x + 1 < DataHolder.gridSize) // check if neighbour right is available
 			if (!DataHolder.squares[x + 1][y].visited)
 				DataHolder.neighbourSquares.add(DataHolder.squares[x + 1][y]);
-		if (y + 1 < 70) // check if neighbour bellow is available
+		if (y + 1 < DataHolder.gridSize) // check if neighbour bellow is available
 			if (!DataHolder.squares[x][y + 1].visited)
 				DataHolder.neighbourSquares.add(DataHolder.squares[x][y + 1]);
 		return DataHolder.neighbourSquares.size();

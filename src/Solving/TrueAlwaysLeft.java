@@ -2,7 +2,7 @@ package Solving;
 
 import java.awt.Graphics;
 
-public class HumanLike {
+public class TrueAlwaysLeft {
 
 	/**
 	 * Class for the solving method imitating a human
@@ -14,7 +14,7 @@ public class HumanLike {
 	 */
 	public static void solve(Graphics g) {
 		// TODO
-		System.out.println("Solving.HumanLike.solve()");
+		System.out.println("Solving.TrueAlwaysLeft.solve()");
 	}
 
 }

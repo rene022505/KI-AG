@@ -1,6 +1,7 @@
 package Editor;
 
 import ActualEditor.ActualEditor;
+import DataHolder.DataHolder;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -152,7 +153,7 @@ public class Editor extends JFrame {
 					// create new file with filename
 					OutputStream oStream = new FileOutputStream(fileName.getText() + ".rcif");
 
-					byte[] temp = ByteBuffer.allocate(4900).array();
+					byte[] temp = ByteBuffer.allocate(DataHolder.gridSize * DataHolder.gridSize).array();
 					oStream.write(temp);
 
 					oStream.close();
