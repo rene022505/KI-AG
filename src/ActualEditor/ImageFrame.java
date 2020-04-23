@@ -2,10 +2,12 @@ package ActualEditor;
 
 import java.awt.*;
 
+import javax.swing.JPanel;
+
 import DataHolder.DataHolder;
 
 @SuppressWarnings("serial")
-class ImageFrame extends javax.swing.JPanel {
+class ImageFrame extends JPanel {
 	/**
 	 * Class for painting the maze onto the screen
 	 */

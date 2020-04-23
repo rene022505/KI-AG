@@ -9,10 +9,10 @@ public class Square {
 	/**
 	 * Class representing the individual squares in the maze
 	 * Squares.Square as byte 01ab cdef: 
-	 * 0 - start (will be changed since always starts at top left) 
-	 * 1 - finish (will be changed since always finishes at bottom right) 
+	 * 0 - start (will be changed since always starts at top left) TODO
+	 * 1 - finish (will be changed since always finishes at bottom right) TODO
 	 * a - part of solve path 
-	 * b - has been visited 
+	 * b - has been visited (can be removed too) TODO
 	 * c - top wall (0 wall, 1 no wall) 
 	 * d - right wall (0 wall, 1 no wall) 
 	 * e - bottom wall (0 wall, 1 no wall) 

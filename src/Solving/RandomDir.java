@@ -15,7 +15,6 @@ public class RandomDir {
 	 * @param g Graphics object
 	 */
 	public static void solve(Graphics g) {
-		// TODO
 		System.out.println("Solving.RandomDir.solve()");
 		
 		GeneralSolving.multiPurpose(SolveMode.RandomDir, g);

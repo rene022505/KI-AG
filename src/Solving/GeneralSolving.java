@@ -13,6 +13,9 @@ public class GeneralSolving {
 	/**
 	 * Class for gathering general functions to prevent duplicate code
 	 */
+	
+	// TODO algos miteinander vergleichen
+	// TODO multi threading?
 
 	/**
 	 * Initiates the solving algorithms

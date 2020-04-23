@@ -25,6 +25,9 @@ public class ActualEditor extends JFrame {
 	private String filename;
 
 	public JPanel panel = new ImageFrame();
+	
+	public JScrollPane scrollPane = new JScrollPane();
+	
 	JPopupMenu solveMenu;
 	JPopupMenu optionMenu;
 
@@ -36,7 +39,7 @@ public class ActualEditor extends JFrame {
 	public ActualEditor(String pFilePath) {
 		super();
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		setSize(770, 800);
+		setSize(735, 785);
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
 		int x = (d.width - getSize().width) / 2;
 		int y = (d.height - getSize().height) / 2;
@@ -154,6 +157,10 @@ public class ActualEditor extends JFrame {
 							JOptionPane.showMessageDialog(null, "Please enter a number bigger or equal to 2!", "Input Error",
 									JOptionPane.ERROR_MESSAGE);
 						else {
+							if (newSize > 70) {
+								panel.setPreferredSize(new Dimension(newSize * 10 + 1, newSize * 10 + 1));
+								scrollPane.setViewportView(panel);
+							}
 							Logic.init(filename, true, newSize);
 							Drawing.drawImage(panel.getGraphics(), DataHolder.genVis);
 						}
@@ -169,15 +176,20 @@ public class ActualEditor extends JFrame {
 			}
 		});
 		menuBar.add(gridSize);
-
-		panel.setBounds(28, 15, DataHolder.panelSize + 1, DataHolder.panelSize + 1);
+		
+		panel.setPreferredSize(new Dimension(DataHolder.panelSize + 1, DataHolder.panelSize + 1)); // setPreferedSize because ScrollPane wants so
 		panel.setOpaque(true);
-		cp.add(panel);
+		
+		// For the bigger picture
+		scrollPane.setBounds(0, 0, DataHolder.panelSize + 19, DataHolder.panelSize + 19);
+		scrollPane.setOpaque(true);
+		scrollPane.setViewportView(panel);
+		cp.add(scrollPane);
 
 		setVisible(true);
 
 		// Updates defaultCloseOperation when closing
-		// Im so proud of this part because i managed to solve it without the internet
+		// I'm so proud of this part because i managed to solve it without the Internet
 		// but just from reading through
 		// JFrame.java and some common sense
 		this.addWindowListener(new WindowListener() {

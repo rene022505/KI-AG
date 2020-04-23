@@ -30,7 +30,7 @@ public class Drawing {
 			}
 		}
 		g.setColor(Color.BLACK);
-		g.drawRect(0, 0, 700, 700);
+		g.drawRect(0, 0, DataHolder.panelSize, DataHolder.panelSize);
 	}
 
 	/**

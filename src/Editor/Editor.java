@@ -186,6 +186,8 @@ public class Editor extends JFrame {
 			}
 		else { // if path is not empty prioritize it above creating a new file
 				// check if file type is correct
+			if (path.getText().endsWith("\"") || path.getText().startsWith("\""));
+				path.setText(path.getText().replace("\"", ""));
 			if (!path.getText().endsWith(".rcif")) {
 				JOptionPane.showMessageDialog(this, "File must be type rcif", "Illegal file type",
 						JOptionPane.ERROR_MESSAGE);
