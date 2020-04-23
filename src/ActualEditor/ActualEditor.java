@@ -159,8 +159,11 @@ public class ActualEditor extends JFrame {
 						else {
 							if (newSize > 70) {
 								panel.setPreferredSize(new Dimension(newSize * 10 + 1, newSize * 10 + 1));
-								scrollPane.setViewportView(panel);
+							} else {
+								panel.setPreferredSize(new Dimension(701, 701));
 							}
+							scrollPane.setViewportView(panel);
+							
 							Logic.init(filename, true, newSize);
 							Drawing.drawImage(panel.getGraphics(), DataHolder.genVis);
 						}

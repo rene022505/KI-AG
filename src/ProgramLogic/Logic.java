@@ -49,11 +49,13 @@ public class Logic {
 
 				oStream.close();
 			}
-			if (size > 70) {
+			if (DataHolder.gridSize > 70) {
 				DataHolder.squareSize = 10;
 				DataHolder.panelSize = size * 10;
-			} else 
+			} else {
+				DataHolder.panelSize = 700;
 				DataHolder.squareSize = DataHolder.panelSize / DataHolder.gridSize;
+			}
 			
 			file = new byte[DataHolder.gridSize][DataHolder.gridSize];
 			DataHolder.solvingSquares = new SolvingSquare[DataHolder.gridSize][DataHolder.gridSize];

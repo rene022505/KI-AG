@@ -67,7 +67,7 @@ public class Generating {
 					neighbour = r.nextInt(help != 0 ? help : 1);
 				}
 
-			// Failsafe because it errors for some reason
+			// Fail safe because it errors for some reason
 			if (br)
 				break;
 
@@ -97,11 +97,11 @@ public class Generating {
 	}
 
 	/**
-	 * Checks if the current cell has any unvisited neighbours
+	 * Checks if the current cell has any unvisited neighbors
 	 * 
 	 * @param x x-coordinate of cell
 	 * @param y y-coordinate of cell
-	 * @return array with neighbours
+	 * @return array with neighbors
 	 */
 	static int neighbours(int x, int y) {
 		DataHolder.neighbourSquares.clear();

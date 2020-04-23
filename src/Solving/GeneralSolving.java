@@ -15,6 +15,7 @@ public class GeneralSolving {
 	 */
 	
 	// TODO algos miteinander vergleichen
+		// RAM, zyklen, steps
 	// TODO multi threading?
 
 	/**
