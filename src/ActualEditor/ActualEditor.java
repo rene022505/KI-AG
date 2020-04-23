@@ -23,9 +23,8 @@ public class ActualEditor extends JFrame {
 
 	private boolean changed = false;
 	private String filename;
-	boolean genVis, solVis;
 
-	JPanel panel = new ImageFrame();
+	public JPanel panel = new ImageFrame();
 	JPopupMenu solveMenu;
 	JPopupMenu optionMenu;
 
@@ -136,13 +135,45 @@ public class ActualEditor extends JFrame {
 		
 		JTextField gridSize = new JTextField();
 		gridSize.setBounds(0, 0, 150, 20);
+		gridSize.addKeyListener(new KeyListener() {
+			
+			@Override
+			public void keyTyped(KeyEvent e) {
+			}
+			
+			@Override
+			public void keyReleased(KeyEvent e) {
+			}
+			
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					try {
+						int newSize = Integer.parseInt(gridSize.getText());
+						if (newSize < 2)
+							JOptionPane.showMessageDialog(null, "Please enter a number bigger or equal to 2!", "Input Error",
+									JOptionPane.ERROR_MESSAGE);
+						else {
+							Logic.init(filename, true, newSize);
+							Drawing.drawImage(panel.getGraphics(), DataHolder.genVis);
+						}
+					} catch (NumberFormatException ex) {
+						JOptionPane.showMessageDialog(null, "Please enter a number bigger or equal to 2!", "NumberFormatException",
+								JOptionPane.ERROR_MESSAGE);
+					} catch (Exception ex) {
+						JOptionPane.showMessageDialog(null, "Something happened and I don't know what... Check console", "?!?!?",
+								JOptionPane.ERROR_MESSAGE);
+						ex.printStackTrace();
+					}
+				}
+			}
+		});
 		menuBar.add(gridSize);
 
 		panel.setBounds(28, 15, DataHolder.panelSize + 1, DataHolder.panelSize + 1);
 		panel.setOpaque(true);
 		cp.add(panel);
 
-		Logic.init(pFilePath);
 		setVisible(true);
 
 		// Updates defaultCloseOperation when closing
@@ -179,8 +210,11 @@ public class ActualEditor extends JFrame {
 				setDefaultCloseOperation(handleClose());
 			}
 		});
+		
+		Logic.init(pFilePath, false, 0);
+		Drawing.drawImage(panel.getGraphics(), DataHolder.genVis);
 	}
-
+	
 	/**
 	 * Displays a little dropdown with all the different solving algorithms
 	 * 
@@ -214,8 +248,8 @@ public class ActualEditor extends JFrame {
 	 */
 	public void visualizeGenerationCheckBoxActionPerformed(ActionEvent ae) {
 		AbstractButton abstractButton = (AbstractButton) ae.getSource();
-		genVis = abstractButton.getModel().isSelected();
-		if (genVis)
+		DataHolder.genVis = abstractButton.getModel().isSelected();
+		if (DataHolder.genVis)
 			JOptionPane.showMessageDialog(null, "Not yet implemented properly", "LazyDevException",
 					JOptionPane.ERROR_MESSAGE);
 	}
@@ -227,8 +261,8 @@ public class ActualEditor extends JFrame {
 	 */
 	public void visualizeSolvingCheckBoxActionPerformed(ActionEvent ae) {
 		AbstractButton abstractButton = (AbstractButton) ae.getSource();
-		solVis = abstractButton.getModel().isSelected();
-		if (solVis)
+		DataHolder.solVis = abstractButton.getModel().isSelected();
+		if (DataHolder.solVis)
 			JOptionPane.showMessageDialog(null, "Not yet implemented properly", "LazyDevException",
 					JOptionPane.ERROR_MESSAGE);
 	}
@@ -253,7 +287,7 @@ public class ActualEditor extends JFrame {
 	 */
 	public void solveButtonActionPerformed(JMenuItem ji) {
 		if (hasMaze) {
-			GeneralSolving.selectSolve(ji.getName(), panel.getGraphics(), solVis);
+			GeneralSolving.selectSolve(ji.getName(), panel.getGraphics(), DataHolder.solVis);
 			setTitle("Editor.Editor: " + this.filename + " - unsaved work");
 			changed = true;
 		}
@@ -267,7 +301,7 @@ public class ActualEditor extends JFrame {
 	 * @param evt Action event
 	 */
 	public void generateButtonActionPerformed(ActionEvent evt) {
-		Generating.generateMaze(panel.getGraphics(), genVis);
+		Generating.generateMaze(panel.getGraphics(), DataHolder.genVis);
 		changed = true;
 		hasMaze = true;
 		setTitle("Editor.Editor: " + this.filename + " - unsaved work");
@@ -285,7 +319,7 @@ public class ActualEditor extends JFrame {
 
 	/**
 	 * Activates when window is being closed, checks for unsaved work and asks the
-	 * user if they are sure to continue. Alsa activates when trying to open a new
+	 * user if they are sure to continue. Also activates when trying to open a new
 	 * file
 	 * 
 	 * @return Closing operation

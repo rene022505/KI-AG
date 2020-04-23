@@ -173,9 +173,10 @@ public class Editor extends JFrame {
 					JOptionPane.showMessageDialog(this, "Something happened to IO...", "IOException",
 							JOptionPane.ERROR_MESSAGE);
 					errorBool = true;
-				} catch (Exception e) { // * Error if anything else goes wrong (don't know what would fulfil this)
-					JOptionPane.showMessageDialog(this, "I don't know how we got here!", "Exception",
+				} catch (Exception e) { // * Error if anything else goes wrong (don't know what would fulfill this)
+					JOptionPane.showMessageDialog(this, "I don't know how we got here, check console if available!", "Exception",
 							JOptionPane.ERROR_MESSAGE);
+					e.printStackTrace();
 					errorBool = true;
 				}
 			else {

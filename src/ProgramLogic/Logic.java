@@ -9,6 +9,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.ByteBuffer;
 
 import Squares.SolvingSquare;
 import Squares.Square;
@@ -21,19 +23,32 @@ public class Logic {
 
 	private static String filePath;
 
-	private static byte[][] file = new byte[DataHolder.gridSize][DataHolder.gridSize];
+	private static byte[][] file = new byte[DataHolder.gridSize][DataHolder.gridSize]; // important
 
 	/**
 	 * Heart of all the logic, starts parsing the file from primary storage into RAM
 	 *
 	 * @param fP File path
+	 * @param sizeChange If the maze size changed while the program was running
+	 * @param size New maze size
 	 */
-	public static void init(String fP) {
+	public static void init(String fP, boolean sizeChange, int size) {
 		filePath = fP;
 
 		try {
-			File f = new File(fP);
-			DataHolder.gridSize = (int) Math.sqrt(f.length());
+			if (!sizeChange) {
+				DataHolder.gridSize = (int) Math.sqrt(new File(fP).length());
+			} else {
+				DataHolder.gridSize = size;
+				
+				// create new file with filename
+				OutputStream oStream = new FileOutputStream(fP);
+
+				byte[] temp = ByteBuffer.allocate(DataHolder.gridSize * DataHolder.gridSize).array();
+				oStream.write(temp);
+
+				oStream.close();
+			}
 			DataHolder.squareSize = DataHolder.panelSize / DataHolder.gridSize;
 			file = new byte[DataHolder.gridSize][DataHolder.gridSize];
 			DataHolder.solvingSquares = new SolvingSquare[DataHolder.gridSize][DataHolder.gridSize];
@@ -55,7 +70,6 @@ public class Logic {
 		}
 
 		parseSquareFromFile();
-		
 	}
 
 	// --- PARSING ---
