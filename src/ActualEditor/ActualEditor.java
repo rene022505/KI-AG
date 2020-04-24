@@ -95,6 +95,12 @@ public class ActualEditor extends JFrame {
 		quantumLike.setName("quantumLike");
 		quantumLike.addActionListener(e -> solveButtonActionPerformed(quantumLike));
 		solveMenu.add(quantumLike);
+		
+		JMenuItem aStar = new JMenuItem();
+		aStar.setText("A*");
+		aStar.setName("aStar");
+		aStar.addActionListener(e -> solveButtonActionPerformed(aStar));
+		solveMenu.add(aStar);
 
 		JButton solveButton = new JButton();
 		solveButton.setBounds(0, 0, 70, 20);

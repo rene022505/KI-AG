@@ -8,7 +8,7 @@ public class SolvingSquare {
 	 */
 	public boolean visitedSolving = false;
 
-	public int absolueX, absoluteY;
+	public int absoluteX, absoluteY;
 
 	/**
 	 * Constructor which copies the representative square
@@ -16,7 +16,7 @@ public class SolvingSquare {
 	 * @param s Squares.Square object
 	 */
 	public SolvingSquare(int pX, int pY) {
-		this.absolueX = pX;
+		this.absoluteX = pX;
 		this.absoluteY = pY;
 	}
 

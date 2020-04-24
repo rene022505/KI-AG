@@ -2,10 +2,10 @@ package Solving;
 
 import java.awt.Graphics;
 
-public class TrueAlwaysLeft {
+public class A_Star {
 
 	/**
-	 * Class for the solving method imitating a human
+	 * Class for the solving method A*
 	 */
 
 	/**
@@ -14,7 +14,7 @@ public class TrueAlwaysLeft {
 	 */
 	public static void solve(Graphics g) {
 		// TODO
-		System.out.println("Solving.TrueAlwaysLeft.solve()");
+		System.out.println("Solving.A_Star.solve()");
 	}
-
+	
 }

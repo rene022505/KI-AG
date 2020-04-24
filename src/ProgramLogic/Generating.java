@@ -11,6 +11,9 @@ import javax.swing.JOptionPane;
 import Squares.Square;
 
 public class Generating {
+	
+	// TODO maze with multiple solutions
+	// TODO different maze generation algo
 
 	/**
 	 * Class for generating the maze

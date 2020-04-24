@@ -68,20 +68,20 @@ public class GeneralSolving {
 				DataHolder.solvingSquares[x][y] = new SolvingSquare(x, y);
 		switch (method) {
 		case "alwaysLeft":
-			System.out.println("Start solving");
 			multiPurpose(SolveMode.AlwaysLeft, g);
-			System.out.println("Done solving");
 			break;
 		case "randomDir":
-			System.out.println("Start solving");
 			multiPurpose(SolveMode.RandomDir, g);
-			System.out.println("Done solving");
 			break;
 		case "trueAlwaysLeft":
-			TrueAlwaysLeft.solve(g);
+			multiPurpose(SolveMode.TrueAlwaysLeft, g);
 			break;
 		case "quantumLike":
 			QuantumLike.solve(g);
+			break;
+		case "aStar":
+			A_Star.solve(g);
+			break;
 		}
 	}
 	
@@ -99,7 +99,7 @@ public class GeneralSolving {
 		boolean br = false;
 		
 		while (!DataHolder.solvingSquareStack.empty()) {
-			x = current.absolueX;
+			x = current.absoluteX;
 			y = current.absoluteY;
 			
 			neighbourCount = GeneralSolving.checkOptions(x, y);
@@ -112,7 +112,7 @@ public class GeneralSolving {
 				
 				if (!DataHolder.solvingSquareStack.empty()) {
 					current = DataHolder.solvingSquareStack.pop();
-					x = current.absolueX;
+					x = current.absoluteX;
 					y = current.absoluteY;
 					neighbourCount = GeneralSolving.checkOptions(x, y);
 				} else {
@@ -130,8 +130,16 @@ public class GeneralSolving {
 				current = DataHolder.neighbourSolvingSquares.get(new Random().nextInt(DataHolder.neighbourSolvingSquares.size()));
 			else if (e == SolveMode.AlwaysLeft)
 				current = DataHolder.neighbourSolvingSquares.get(0);
-			// else if (e == SolveMode.TrueAlwaysLeft)
-				// TODO
+			else if (e == SolveMode.TrueAlwaysLeft) { // It solves the maze but not sure if it uses the method i was hoping for
+				if (current.absoluteX > DataHolder.solvingSquareStack.get(DataHolder.solvingSquareStack.size() - 2).absoluteX) 
+					current = DataHolder.neighbourSolvingSquares.get(DataHolder.neighbourSolvingSquares.size() == 1 ? 0 : 1);
+				else if (current.absoluteX < DataHolder.solvingSquareStack.get(DataHolder.solvingSquareStack.size() - 2).absoluteX) 
+					current = DataHolder.neighbourSolvingSquares.get(DataHolder.neighbourSolvingSquares.size() - 1);
+				else if (current.absoluteY > DataHolder.solvingSquareStack.get(DataHolder.solvingSquareStack.size() - 2).absoluteY) 
+					current = DataHolder.neighbourSolvingSquares.get(DataHolder.neighbourSolvingSquares.size() == 3 ? 2 : DataHolder.neighbourSolvingSquares.size() - 1);
+				else
+					current = DataHolder.neighbourSolvingSquares.get(0);
+			}
 			
 			current.visitedSolving = true;
 			if (x + y == (DataHolder.gridSize - 1) * 2)
