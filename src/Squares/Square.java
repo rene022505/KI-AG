@@ -35,6 +35,7 @@ public class Square {
 	 * @param g Graphics object
 	 */
 	public void removeTop(Graphics g) {
+		g.setColor(Color.WHITE);
 		g.drawLine(this.x + 1, this.y, this.x + (int) DataHolder.squareSize - 1, this.y);
 	}
 
@@ -51,6 +52,7 @@ public class Square {
 	 * @param g Graphics object
 	 */
 	public void removeRight(Graphics g) {
+		g.setColor(Color.WHITE);
 		g.drawLine(this.x + (int) DataHolder.squareSize, this.y + 1, this.x + (int) DataHolder.squareSize, this.y + (int) DataHolder.squareSize - 1);
 	}
 
@@ -67,6 +69,7 @@ public class Square {
 	 * @param g Graphics object
 	 */
 	public void removeBottom(Graphics g) {
+		g.setColor(Color.WHITE);
 		g.drawLine(this.x + 1, this.y + (int) DataHolder.squareSize, this.x + (int) DataHolder.squareSize - 1, this.y + (int) DataHolder.squareSize);
 	}
 
@@ -83,6 +86,7 @@ public class Square {
 	 * @param g Graphics object
 	 */
 	public void removeLeft(Graphics g) {
+		g.setColor(Color.WHITE);
 		g.drawLine(this.x, this.y + 1, this.x, this.y + (int) DataHolder.squareSize - 1);
 	}
 

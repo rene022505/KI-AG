@@ -165,7 +165,7 @@ public class ActualEditor extends JFrame {
 							scrollPane.setViewportView(panel);
 							
 							Logic.init(filename, true, newSize);
-							Drawing.drawImage(panel.getGraphics(), DataHolder.genVis);
+							Drawing.drawImage(panel.getGraphics());
 						}
 					} catch (NumberFormatException ex) {
 						JOptionPane.showMessageDialog(null, "Please enter a number bigger or equal to 2!", "NumberFormatException",
@@ -227,11 +227,11 @@ public class ActualEditor extends JFrame {
 		});
 		
 		Logic.init(pFilePath, false, 0);
-		Drawing.drawImage(panel.getGraphics(), DataHolder.genVis);
+		Drawing.drawImage(panel.getGraphics());
 	}
 	
 	/**
-	 * Displays a little dropdown with all the different solving algorithms
+	 * Displays a little drop down with all the different solving algorithms
 	 * 
 	 * @param ae ActionEvent
 	 */
@@ -244,7 +244,7 @@ public class ActualEditor extends JFrame {
 	}
 
 	/**
-	 * Displays a little dropdown with all the different options
+	 * Displays a little drop down with all the different options
 	 * 
 	 * @param ae ActionEvent
 	 */
@@ -264,9 +264,6 @@ public class ActualEditor extends JFrame {
 	public void visualizeGenerationCheckBoxActionPerformed(ActionEvent ae) {
 		AbstractButton abstractButton = (AbstractButton) ae.getSource();
 		DataHolder.genVis = abstractButton.getModel().isSelected();
-		if (DataHolder.genVis)
-			JOptionPane.showMessageDialog(null, "Not yet implemented properly", "LazyDevException",
-					JOptionPane.ERROR_MESSAGE);
 	}
 
 	/**

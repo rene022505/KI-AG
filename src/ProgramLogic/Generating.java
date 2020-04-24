@@ -6,6 +6,8 @@ import DataHolder.DataHolder;
 import java.awt.*;
 import java.util.Random;
 
+import javax.swing.JOptionPane;
+
 import Squares.Square;
 
 public class Generating {
@@ -31,6 +33,10 @@ public class Generating {
 				DataHolder.squares[x][y].solve = false;
 				DataHolder.squares[x][y].isStart = false;
 				DataHolder.squares[x][y].isFinish = false;
+				if (genVis) {
+					g.drawLine(x * (int) DataHolder.squareSize, 0, x * (int) DataHolder.squareSize, DataHolder.panelSize);
+					g.drawLine(0, y * (int) DataHolder.squareSize, DataHolder.panelSize, y * (int) DataHolder.squareSize);
+				}
 			}
 		}
 
@@ -38,7 +44,7 @@ public class Generating {
 		DataHolder.squares[0][0].isStart = true;
 		DataHolder.squares[DataHolder.gridSize - 1][DataHolder.gridSize - 1].isFinish = true;
 
-		// Read wikipedia maze generation recursive backtracking to understand the
+		// Read Wikipedia maze generation recursive backtracking to understand the
 		// following
 		Square current = DataHolder.squares[0][0]; // Step 1
 		current.visited = true;
@@ -67,7 +73,7 @@ public class Generating {
 					neighbour = r.nextInt(help != 0 ? help : 1);
 				}
 
-			// Fail safe because it errors for some reason
+			// Break when done
 			if (br)
 				break;
 
@@ -77,23 +83,54 @@ public class Generating {
 			if (previous.absoluteX - current.absoluteX > 0) { // Step 2.2.3
 				previous.removeLeftBool();
 				current.removeRightBool();
+				if (genVis) {
+					previous.removeLeft(g);
+					current.removeRight(g);
+				}
 			} else if (previous.absoluteX - current.absoluteX < 0) {
 				current.removeLeftBool();
 				previous.removeRightBool();
+				if (genVis) {
+					current.removeLeft(g);
+					previous.removeRight(g);
+				}
 			} else if (previous.absoluteY - current.absoluteY < 0) {
 				current.removeTopBool();
 				previous.removeBottomBool();
+				if (genVis) {
+					previous.removeBottom(g);
+					current.removeTop(g);
+				}
 			} else {
 				previous.removeTopBool();
 				current.removeBottomBool();
+				if (genVis) {
+					previous.removeTop(g);
+					current.removeBottom(g);
+				}
 			}
+			
+			if(genVis)
+				try {
+					Thread.sleep(0,  50);
+				} catch (InterruptedException e) {
+					JOptionPane.showMessageDialog(null, "Something happened and I don't know what... Check console", "?!?!?",
+							JOptionPane.ERROR_MESSAGE);
+					e.printStackTrace();
+				}
 
 			current.visited = true; // Step 2.2.4
 			DataHolder.squareStack.push(current);
 		}
-		g.setColor(Color.black);
 		DataHolder.squareStack.clear();
-		Drawing.drawImage(g, genVis);
+		if (!genVis)
+			Drawing.drawImage(g);
+		else {
+			g.setColor(Color.ORANGE);
+			g.fillRect(DataHolder.panelSize - (int) DataHolder.squareSize - 1, DataHolder.panelSize - (int) DataHolder.squareSize - 1, DataHolder.panelSize - 1, DataHolder.panelSize - 1);
+			g.setColor(Color.RED);
+			g.fillRect(1, 1, (int) DataHolder.squareSize - 1, (int) DataHolder.squareSize - 1);
+		}
 	}
 
 	/**

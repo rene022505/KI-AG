@@ -21,7 +21,7 @@ class ImageFrame extends JPanel {
 	protected void paintComponent(Graphics g) {
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, DataHolder.panelSize + 1, DataHolder.panelSize + 1);
-		Drawing.drawImage(g, false);
+		Drawing.drawImage(g);
 	}
 
 }

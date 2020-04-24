@@ -102,7 +102,7 @@ public class Editor extends JFrame {
 
 	/**
 	 * Adds key press shortcuts like enter to submit and if
-	 * ActualEditor.ActualEditor instance is running esc to close the window
+	 * ActualEditor.ActualEditor instance is running escape to close the window
 	 *
 	 * @param jf   JFrame instance of ActualEditor.ActualEditor or null
 	 * @param cp   Container which holds all the JComponents

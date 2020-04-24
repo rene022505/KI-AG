@@ -3,6 +3,7 @@ package DataHolder;
 public enum SolveMode {
 	
 	AlwaysLeft,
-	RandomDir
+	RandomDir,
+	TrueAlwaysLeft
 
 }

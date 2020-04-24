@@ -16,11 +16,10 @@ public class Drawing {
 	 * @param g Graphics object
 	 * @param genVis boolean visualize generation
 	 */
-	public static void drawImage(Graphics g, boolean genVis) {
+	public static void drawImage(Graphics g) {
 		// draws the actual image
-		for (int y = 0; y < DataHolder.gridSize; y++) {
+		for (int y = 0; y < DataHolder.gridSize; y++) 
 			for (int x = 0; x < DataHolder.gridSize; x++) {
-				// TODO: Add visualizing
 				allWalls(g, x, y);
 				if (DataHolder.squares[x][y].solve) {
 					parseWallsSolve(g, x, y);
@@ -28,7 +27,6 @@ public class Drawing {
 					parseWalls(g, x, y);
 				}
 			}
-		}
 		g.setColor(Color.BLACK);
 		g.drawRect(0, 0, DataHolder.panelSize, DataHolder.panelSize);
 	}

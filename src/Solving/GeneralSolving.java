@@ -28,11 +28,11 @@ public class GeneralSolving {
 	} // create SquareSolve array
 
 	/**
-	 * Checks the options of unvisited neighbours
+	 * Checks the options of unvisited neighbors
 	 *
 	 * @param x x-coordinate of square
 	 * @param y y-coordinate of square
-	 * @return unvisited neighbour array list
+	 * @return unvisited neighbor array list
 	 */
 	static int checkOptions(int x, int y) {
 		DataHolder.neighbourSolvingSquares.clear();
@@ -68,10 +68,14 @@ public class GeneralSolving {
 				DataHolder.solvingSquares[x][y] = new SolvingSquare(x, y);
 		switch (method) {
 		case "alwaysLeft":
-			AlwaysLeft.solve(g);
+			System.out.println("Start solving");
+			multiPurpose(SolveMode.AlwaysLeft, g);
+			System.out.println("Done solving");
 			break;
 		case "randomDir":
-			RandomDir.solve(g);
+			System.out.println("Start solving");
+			multiPurpose(SolveMode.RandomDir, g);
+			System.out.println("Done solving");
 			break;
 		case "trueAlwaysLeft":
 			TrueAlwaysLeft.solve(g);
@@ -117,7 +121,7 @@ public class GeneralSolving {
 				}
 			}
 
-			if (br)
+			if (br) //break when done
 				break;
 
 			DataHolder.solvingSquareStack.push(current);
@@ -126,6 +130,8 @@ public class GeneralSolving {
 				current = DataHolder.neighbourSolvingSquares.get(new Random().nextInt(DataHolder.neighbourSolvingSquares.size()));
 			else if (e == SolveMode.AlwaysLeft)
 				current = DataHolder.neighbourSolvingSquares.get(0);
+			// else if (e == SolveMode.TrueAlwaysLeft)
+				// TODO
 			
 			current.visitedSolving = true;
 			if (x + y == (DataHolder.gridSize - 1) * 2)
@@ -134,7 +140,7 @@ public class GeneralSolving {
 				if (!(x == 0 && y == 0))
 					DataHolder.squares[x][y].solve = true;
 		}
-		Drawing.drawImage(g, false);
+		Drawing.drawImage(g);
 	}
 
 }
