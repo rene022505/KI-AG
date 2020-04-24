@@ -37,7 +37,7 @@ public class ActualEditor extends JFrame {
 	 * @param pFilePath String with path to file
 	 */
 	public ActualEditor(String pFilePath) {
-		super();
+		super(); // Base GUI stuff
 		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		setSize(735, 785);
 		Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
@@ -53,12 +53,12 @@ public class ActualEditor extends JFrame {
 				break;
 			}
 		}
-
 		setTitle("Editor.Editor: " + this.filename);
 		setResizable(false);
 		Container cp = getContentPane();
 		cp.setLayout(null);
 
+		// Add buttons and panels and all the good stuff
 		JMenuBar menuBar = new JMenuBar();
 		setJMenuBar(menuBar);
 
@@ -144,7 +144,7 @@ public class ActualEditor extends JFrame {
 		
 		JTextField gridSize = new JTextField();
 		gridSize.setBounds(0, 0, 150, 20);
-		gridSize.addKeyListener(new KeyListener() {
+		gridSize.addKeyListener(new KeyListener() { // key listener as submit action for resizing the maze size
 			
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -163,17 +163,23 @@ public class ActualEditor extends JFrame {
 							JOptionPane.showMessageDialog(null, "Please enter a number bigger or equal to 2!", "Input Error",
 									JOptionPane.ERROR_MESSAGE);
 						else {
-							if (newSize > 70) {
-								panel.setPreferredSize(new Dimension(newSize * 10 + 1, newSize * 10 + 1));
+							if (newSize > 70) { // change the panels size depending on the grid size
+								panel.setPreferredSize(new Dimension(newSize * 10 + 1, newSize * 10 + 1)); 
 							} else {
 								panel.setPreferredSize(new Dimension(701, 701));
 							}
-							scrollPane.setViewportView(panel);
+							scrollPane.setViewportView(panel); // update the scroll pane 
 							
-							Logic.init(filename, true, newSize);
-							Drawing.drawImage(panel.getGraphics());
+							Logic.init(filename, true, newSize); // create new file and squares in RAM
+							
+							// draw a grid
+							for (int y = 0; y < newSize; y++) 
+								for (int x = 0; x < newSize; x++) {
+									panel.getGraphics().drawLine(x * (int) DataHolder.squareSize, 0, x * (int) DataHolder.squareSize, DataHolder.panelSize);
+									panel.getGraphics().drawLine(0, y * (int) DataHolder.squareSize, DataHolder.panelSize, y * (int) DataHolder.squareSize);
+								}
 						}
-					} catch (NumberFormatException ex) {
+					} catch (NumberFormatException ex) { 
 						JOptionPane.showMessageDialog(null, "Please enter a number bigger or equal to 2!", "NumberFormatException",
 								JOptionPane.ERROR_MESSAGE);
 					} catch (Exception ex) {
@@ -232,8 +238,9 @@ public class ActualEditor extends JFrame {
 			}
 		});
 		
+		// Parse and display file and all 
 		Logic.init(pFilePath, false, 0);
-		Drawing.drawImage(panel.getGraphics());
+		Drawing.drawImage(panel.getGraphics()); 
 	}
 	
 	/**
@@ -305,12 +312,12 @@ public class ActualEditor extends JFrame {
 	 */
 	public void solveButtonActionPerformed(JMenuItem ji) {
 		if (hasMaze) {
-			GeneralSolving.selectSolve(ji.getName(), panel.getGraphics(), DataHolder.solVis);
+			GeneralSolving.selectSolve(ji.getName(), panel.getGraphics(), DataHolder.solVis); // Executes the selected solving method
 			setTitle("Editor.Editor: " + this.filename + " - unsaved work");
 			changed = true;
 		}
 		else
-			JOptionPane.showMessageDialog(this, "Nothing to solve", "NothingToSolve Error", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(this, "Nothing to solve", "NothingToSolve Exception", JOptionPane.ERROR_MESSAGE);
 	}
 
 	/**

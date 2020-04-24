@@ -37,7 +37,7 @@ public class Logic {
 
 		try {
 			if (!sizeChange) {
-				DataHolder.gridSize = (int) Math.sqrt(new File(fP).length());
+				DataHolder.gridSize = (int) Math.sqrt(new File(fP).length()); // parse grid size from file size
 			} else {
 				DataHolder.gridSize = size;
 				
@@ -49,7 +49,7 @@ public class Logic {
 
 				oStream.close();
 			}
-			if (DataHolder.gridSize > 70) {
+			if (DataHolder.gridSize > 70) { // set all the variables to fit the grid size
 				DataHolder.squareSize = 10;
 				DataHolder.panelSize = size * 10;
 			} else {
@@ -61,7 +61,7 @@ public class Logic {
 			DataHolder.solvingSquares = new SolvingSquare[DataHolder.gridSize][DataHolder.gridSize];
 			DataHolder.squares = new Square[DataHolder.gridSize][DataHolder.gridSize];
 
-			FileInputStream iStream = new FileInputStream(fP);
+			FileInputStream iStream = new FileInputStream(fP); // read from file
 			for (int y = 0; y < DataHolder.gridSize; y++) {
 				for (int x = 0; x < DataHolder.gridSize; x++) {
 					file[x][y] = iStream.readNBytes(1)[0];

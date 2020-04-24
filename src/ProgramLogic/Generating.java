@@ -36,7 +36,7 @@ public class Generating {
 				DataHolder.squares[x][y].solve = false;
 				DataHolder.squares[x][y].isStart = false;
 				DataHolder.squares[x][y].isFinish = false;
-				if (genVis) {
+				if (genVis) { // draws grid
 					g.drawLine(x * (int) DataHolder.squareSize, 0, x * (int) DataHolder.squareSize, DataHolder.panelSize);
 					g.drawLine(0, y * (int) DataHolder.squareSize, DataHolder.panelSize, y * (int) DataHolder.squareSize);
 				}
@@ -128,7 +128,7 @@ public class Generating {
 		DataHolder.squareStack.clear();
 		if (!genVis)
 			Drawing.drawImage(g);
-		else {
+		else { // draw start and finish squares
 			g.setColor(Color.ORANGE);
 			g.fillRect(DataHolder.panelSize - (int) DataHolder.squareSize - 1, DataHolder.panelSize - (int) DataHolder.squareSize - 1, DataHolder.panelSize - 1, DataHolder.panelSize - 1);
 			g.setColor(Color.RED);
@@ -145,16 +145,16 @@ public class Generating {
 	 */
 	static int neighbours(int x, int y) {
 		DataHolder.neighbourSquares.clear();
-		if (x - 1 >= 0) // check if neighbour left is available
+		if (x - 1 >= 0) // check if neighbor left is available
 			if (!DataHolder.squares[x - 1][y].visited)
 				DataHolder.neighbourSquares.add(DataHolder.squares[x - 1][y]);
-		if (y - 1 >= 0) // check if neighbour on top is available
+		if (y - 1 >= 0) // check if neighbor on top is available
 			if (!DataHolder.squares[x][y - 1].visited)
 				DataHolder.neighbourSquares.add(DataHolder.squares[x][y - 1]);
-		if (x + 1 < DataHolder.gridSize) // check if neighbour right is available
+		if (x + 1 < DataHolder.gridSize) // check if neighbor right is available
 			if (!DataHolder.squares[x + 1][y].visited)
 				DataHolder.neighbourSquares.add(DataHolder.squares[x + 1][y]);
-		if (y + 1 < DataHolder.gridSize) // check if neighbour bellow is available
+		if (y + 1 < DataHolder.gridSize) // check if neighbor bellow is available
 			if (!DataHolder.squares[x][y + 1].visited)
 				DataHolder.neighbourSquares.add(DataHolder.squares[x][y + 1]);
 		return DataHolder.neighbourSquares.size();

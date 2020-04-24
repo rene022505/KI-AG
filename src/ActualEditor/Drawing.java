@@ -28,7 +28,7 @@ public class Drawing {
 				}
 			}
 		g.setColor(Color.BLACK);
-		g.drawRect(0, 0, DataHolder.panelSize, DataHolder.panelSize);
+		g.drawRect(0, 0, DataHolder.panelSize, DataHolder.panelSize); // draws a border 
 	}
 
 	/**

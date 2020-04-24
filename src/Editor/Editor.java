@@ -28,7 +28,7 @@ public class Editor extends JFrame {
 	private JLabel pathLabel = new JLabel();
 	private JButton submit = new JButton();
 
-	private boolean errorBool;
+	private boolean errorBool; // boolean to prevent infinite loops when entering invalid input
 
 	public Editor() {
 		super();
@@ -46,7 +46,7 @@ public class Editor extends JFrame {
 	 * @param jf JFrame instance of the "ActualEditor.ActualEditor" or null
 	 */
 	public void init(JFrame jf) {
-		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE); // Basic GUI stuff
 		int frameWidth = 300;
 		int frameHeight = 135;
 		setSize(frameWidth, frameHeight);
@@ -59,6 +59,7 @@ public class Editor extends JFrame {
 		Container cp = getContentPane();
 		cp.setLayout(null);
 
+		// Adding input and all the good stuff
 		fileNameLabel.setBounds(20, 10, 70, 20);
 		fileNameLabel.setText("Name: ");
 		cp.add(fileNameLabel);
@@ -75,7 +76,7 @@ public class Editor extends JFrame {
 		submit.setText("Ok");
 		submit.setMargin(new Insets(2, 2, 2, 2));
 		submit.addActionListener(evt -> submitActionPerformed(jf));
-		submit.addKeyListener(new KeyListener() {
+		submit.addKeyListener(new KeyListener() { // Escape as submit
 			@Override
 			public void keyTyped(KeyEvent e) {
 			}

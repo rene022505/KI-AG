@@ -8,7 +8,7 @@ public class SolvingSquare {
 	 */
 	public boolean visitedSolving = false;
 
-	public int absoluteX, absoluteY;
+	public int absoluteX, absoluteY; // array locations
 
 	/**
 	 * Constructor which copies the representative square

@@ -103,8 +103,9 @@ public class GeneralSolving {
 			y = current.absoluteY;
 			
 			neighbourCount = GeneralSolving.checkOptions(x, y);
-			while (neighbourCount == 0) {
-				if ((x == DataHolder.gridSize - 1) && (y == DataHolder.gridSize - 1)) {
+			while (neighbourCount == 0) { // if no neighbors do the backtracking
+				// if current cell is finish TODO rewrite if custom/random finish and start
+				if ((x == DataHolder.gridSize - 1) && (y == DataHolder.gridSize - 1)) { 
 					br = true;
 					break;
 				} else

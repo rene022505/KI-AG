@@ -23,7 +23,8 @@ public class Square {
 	/* MAJOR CHANGE IN GENERATION WITH CUSTOM START AND FINISH COULD HAPPEN */
 
 	public boolean[] walls = { true, true, true, true }; // true = wall, false = no wall
-	public int x, y, absoluteX, absoluteY;
+	public int x, y; // Pixel location
+	public int absoluteX, absoluteY; // Array index
 	public boolean visited = false;
 	public boolean solve = false;
 	public boolean isStart = false; // Will be removed soon
