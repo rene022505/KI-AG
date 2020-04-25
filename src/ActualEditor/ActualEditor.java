@@ -1,12 +1,16 @@
 package ActualEditor;
 
 import Editor.Editor;
-import ProgramLogic.Generating;
 import ProgramLogic.Logic;
-import Solving.GeneralSolving;
+import Squares.SolvingSquare;
+import Squares.Square;
+import multiThreading.InvokeGenerate_Thread;
+import multiThreading.InvokeSolving_Thread;
+import multiThreading.Resize_Thread;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
 
 import javax.swing.*;
 
@@ -27,6 +31,11 @@ public class ActualEditor extends JFrame {
 	public JPanel panel = new ImageFrame();
 	
 	public JScrollPane scrollPane = new JScrollPane();
+	
+	// Thread objects
+	Thread invokeGeneration = new Thread();
+	Thread invokeSolving = new Thread();
+	Thread resizeMaze = new Thread();
 	
 	JPopupMenu solveMenu;
 	JPopupMenu optionMenu;
@@ -134,6 +143,11 @@ public class ActualEditor extends JFrame {
 		visualizeSolving.setText("Visualize solving");
 		optionMenu.add(visualizeSolving);
 		visualizeSolving.addActionListener(this::visualizeSolvingCheckBoxActionPerformed);
+		
+		JCheckBoxMenuItem multiThreading = new JCheckBoxMenuItem();
+		multiThreading.setText("Multi threading");
+		optionMenu.add(multiThreading);
+		multiThreading.addActionListener(this::multiThreadingCheckBoxActionPerformed);
 
 		JButton optionsButton = new JButton();
 		optionsButton.setBounds(0, 0, 70, 20);
@@ -163,21 +177,14 @@ public class ActualEditor extends JFrame {
 							JOptionPane.showMessageDialog(null, "Please enter a number bigger or equal to 2!", "Input Error",
 									JOptionPane.ERROR_MESSAGE);
 						else {
-							if (newSize > 70) { // change the panels size depending on the grid size
-								panel.setPreferredSize(new Dimension(newSize * 10 + 1, newSize * 10 + 1)); 
-							} else {
-								panel.setPreferredSize(new Dimension(701, 701));
+							if (!resizeMaze.isAlive()) { // if thread is not already running create new thread
+								resizeMaze = new Thread(new Resize_Thread(filename, newSize, panel, scrollPane));
+								resizeMaze.start();
+							} else { // if thread is already running interrupt it and start a new one
+								resizeMaze.interrupt();
+								resizeMaze = new Thread(new Resize_Thread(filename, newSize, panel, scrollPane));
+								resizeMaze.start();
 							}
-							scrollPane.setViewportView(panel); // update the scroll pane 
-							
-							Logic.init(filename, true, newSize); // create new file and squares in RAM
-							
-							// draw a grid
-							for (int y = 0; y < newSize; y++) 
-								for (int x = 0; x < newSize; x++) {
-									panel.getGraphics().drawLine(x * (int) DataHolder.squareSize, 0, x * (int) DataHolder.squareSize, DataHolder.panelSize);
-									panel.getGraphics().drawLine(0, y * (int) DataHolder.squareSize, DataHolder.panelSize, y * (int) DataHolder.squareSize);
-								}
 						}
 					} catch (NumberFormatException ex) { 
 						JOptionPane.showMessageDialog(null, "Please enter a number bigger or equal to 2!", "NumberFormatException",
@@ -239,7 +246,7 @@ public class ActualEditor extends JFrame {
 		});
 		
 		// Parse and display file and all 
-		Logic.init(pFilePath, false, 0);
+		Logic.init(pFilePath, (int) Math.sqrt(new File(filename).length()));
 		Drawing.drawImage(panel.getGraphics()); 
 	}
 	
@@ -291,6 +298,19 @@ public class ActualEditor extends JFrame {
 			JOptionPane.showMessageDialog(null, "Not yet implemented properly", "LazyDevException",
 					JOptionPane.ERROR_MESSAGE);
 	}
+	
+	/**
+	 * ActionListener for activating multi threading
+	 * 
+	 * @param ae Action event
+	 */
+	public void multiThreadingCheckBoxActionPerformed(ActionEvent ae) {
+		AbstractButton abstractButton = (AbstractButton) ae.getSource();
+		DataHolder.multiThreading = abstractButton.getModel().isSelected();
+		if (DataHolder.multiThreading)
+			JOptionPane.showMessageDialog(null, "Not yet implemented properly", "LazyDevException",
+					JOptionPane.ERROR_MESSAGE);
+	}
 
 	/**
 	 * Saves the edited maze from RAM to primary storage
@@ -312,7 +332,14 @@ public class ActualEditor extends JFrame {
 	 */
 	public void solveButtonActionPerformed(JMenuItem ji) {
 		if (hasMaze) {
-			GeneralSolving.selectSolve(ji.getName(), panel.getGraphics(), DataHolder.solVis); // Executes the selected solving method
+			if (!invokeSolving.isAlive()) { // if thread is not already running create new thread
+				invokeSolving = new Thread(new InvokeSolving_Thread(ji.getName(), panel.getGraphics()));
+				invokeSolving.start();
+			} else { // if thread is already running interrupt it and start a new one
+				invokeSolving.interrupt();
+				invokeSolving = new Thread(new InvokeSolving_Thread(ji.getName(), panel.getGraphics()));
+				invokeSolving.start();
+			}
 			setTitle("Editor.Editor: " + this.filename + " - unsaved work");
 			changed = true;
 		}
@@ -326,7 +353,14 @@ public class ActualEditor extends JFrame {
 	 * @param evt Action event
 	 */
 	public void generateButtonActionPerformed(ActionEvent evt) {
-		Generating.generateMaze(panel.getGraphics(), DataHolder.genVis);
+		if (!invokeGeneration.isAlive()) { // if thread is not already running create new thread
+			invokeGeneration = new Thread(new InvokeGenerate_Thread(panel.getGraphics(), DataHolder.genVis));
+			invokeGeneration.start();
+		} else { // if thread is already running interrupt it and start a new one
+			invokeGeneration.interrupt();
+			invokeGeneration = new Thread(new InvokeGenerate_Thread(panel.getGraphics(), DataHolder.genVis));
+			invokeGeneration.start();
+		}
 		changed = true;
 		hasMaze = true;
 		setTitle("Editor.Editor: " + this.filename + " - unsaved work");

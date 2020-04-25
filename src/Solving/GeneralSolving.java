@@ -19,15 +19,6 @@ public class GeneralSolving {
 	// TODO multi threading?
 
 	/**
-	 * Initiates the solving algorithms
-	 *
-	 * @param s Squares.SquareSolving two dimensional array
-	 */
-	public static void init(SolvingSquare[][] s) {
-		DataHolder.solvingSquares = s;
-	} // create SquareSolve array
-
-	/**
 	 * Checks the options of unvisited neighbors
 	 *
 	 * @param x x-coordinate of square

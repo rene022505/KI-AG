@@ -117,9 +117,19 @@ public class Generating {
 				try {
 					Thread.sleep(0,  50);
 				} catch (InterruptedException e) {
-					JOptionPane.showMessageDialog(null, "Something happened and I don't know what... Check console", "?!?!?",
-							JOptionPane.ERROR_MESSAGE);
-					e.printStackTrace();
+					StackTraceElement stackTraceList[] = e.getStackTrace();
+					boolean temp = true;
+					for (StackTraceElement s : stackTraceList) { // only show the error message if it was not a wanted thread interrupt
+						if (s.getClassName().equals("multiThreading.InvokeGenerate_Thread")) {
+							temp = false;
+							break;
+						}
+					}
+					if (temp) {
+						JOptionPane.showMessageDialog(null, "Something happened and I don't know what... Check console", "?!?!?",
+								JOptionPane.ERROR_MESSAGE);
+						e.printStackTrace();
+					}
 				}
 
 			current.visited = true; // Step 2.2.4

@@ -22,7 +22,8 @@ public class DataHolder {
 	public static ArrayList<SolvingSquare> neighbourSolvingSquares = new ArrayList<>();
 	
 	// TODO
-	public static boolean genVis = false; // not yet implemented
+	public static boolean genVis = false; 
 	public static boolean solVis = false; // not yet implemented
+	public static boolean multiThreading = false; // not yet implemented
 
 }

@@ -7,7 +7,6 @@ import DataHolder.DataHolder;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.File;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.ByteBuffer;
@@ -32,23 +31,22 @@ public class Logic {
 	 * @param sizeChange If the maze size changed while the program was running
 	 * @param size New maze size
 	 */
-	public static void init(String fP, boolean sizeChange, int size) {
+	public static void init(String fP, int size) {
 		filePath = fP;
-
 		try {
-			if (!sizeChange) {
-				DataHolder.gridSize = (int) Math.sqrt(new File(fP).length()); // parse grid size from file size
-			} else {
-				DataHolder.gridSize = size;
-				
-				// create new file with filename
-				OutputStream oStream = new FileOutputStream(fP);
+			file = new byte[size][size];
+			DataHolder.solvingSquares = new SolvingSquare[size][size];
+			DataHolder.squares = new Square[size][size];
+			
+			DataHolder.gridSize = size;
+			// create new file with filename
+			OutputStream oStream = new FileOutputStream(fP);
 
-				byte[] temp = ByteBuffer.allocate(DataHolder.gridSize * DataHolder.gridSize).array();
-				oStream.write(temp);
+			byte[] temp = ByteBuffer.allocate(DataHolder.gridSize * DataHolder.gridSize).array();
+			oStream.write(temp);
 
-				oStream.close();
-			}
+			oStream.close();
+			
 			if (DataHolder.gridSize > 70) { // set all the variables to fit the grid size
 				DataHolder.squareSize = 10;
 				DataHolder.panelSize = size * 10;
@@ -56,11 +54,6 @@ public class Logic {
 				DataHolder.panelSize = 700;
 				DataHolder.squareSize = DataHolder.panelSize / DataHolder.gridSize;
 			}
-			
-			file = new byte[DataHolder.gridSize][DataHolder.gridSize];
-			DataHolder.solvingSquares = new SolvingSquare[DataHolder.gridSize][DataHolder.gridSize];
-			DataHolder.squares = new Square[DataHolder.gridSize][DataHolder.gridSize];
-
 			FileInputStream iStream = new FileInputStream(fP); // read from file
 			for (int y = 0; y < DataHolder.gridSize; y++) {
 				for (int x = 0; x < DataHolder.gridSize; x++) {
@@ -68,14 +61,14 @@ public class Logic {
 				}
 			}
 			iStream.close();
-		} catch (FileNotFoundException e) { // * In case the file can'T be read
+		} catch (FileNotFoundException e) { // * In case the file can't be read
 			JOptionPane.showMessageDialog(null,
 					"Something withing the last few java calls went wrong for the file to have vanished :(",
 					"FileNotFoundException", JOptionPane.ERROR_MESSAGE);
 		} catch (IOException e) { // * in case of something else
 			JOptionPane.showMessageDialog(null, "Reading from file failed", "IOException", JOptionPane.ERROR_MESSAGE);
 		}
-
+		
 		parseSquareFromFile();
 	}
 
