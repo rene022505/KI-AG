@@ -35,8 +35,7 @@ public class Resize_Thread implements Runnable {
 		}
 		scrollPane.setViewportView(panel); // update the scroll pane 
 		
-		// PROBLEM kinda solved? not really but oh well, still null pointer exception but i don't know how to fix
-		// of date 25.4.2020 TODO fix this
+		// still not working, i might just put it in mainthread again because fuck that
 		Logic.init(name, size); // create new file and squares in RAM
 		Drawing.drawImage(panel.getGraphics());
 	}

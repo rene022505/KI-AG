@@ -2,8 +2,6 @@ package ActualEditor;
 
 import Editor.Editor;
 import ProgramLogic.Logic;
-import Squares.SolvingSquare;
-import Squares.Square;
 import multiThreading.InvokeGenerate_Thread;
 import multiThreading.InvokeSolving_Thread;
 import multiThreading.Resize_Thread;
@@ -177,15 +175,23 @@ public class ActualEditor extends JFrame {
 							JOptionPane.showMessageDialog(null, "Please enter a number bigger or equal to 2!", "Input Error",
 									JOptionPane.ERROR_MESSAGE);
 						else {
-							if (!resizeMaze.isAlive()) { // if thread is not already running create new thread
+							if (!resizeMaze.isAlive() && !invokeGeneration.isAlive() && !invokeSolving.isAlive()) { // if thread is not already running create new thread
 								resizeMaze = new Thread(new Resize_Thread(filename, newSize, panel, scrollPane));
 								resizeMaze.start();
 							} else { // if thread is already running interrupt it and start a new one
-								resizeMaze.interrupt();
+								if (resizeMaze.isAlive())
+									resizeMaze.interrupt();
+								if (invokeGeneration.isAlive())
+									invokeGeneration.interrupt();
+								if (invokeSolving.isAlive())
+									invokeSolving.interrupt();
 								resizeMaze = new Thread(new Resize_Thread(filename, newSize, panel, scrollPane));
 								resizeMaze.start();
 							}
 						}
+						hasMaze = false;
+						changed = true;
+						setTitle("Editor.Editor: " + filename + " - unsaved work");
 					} catch (NumberFormatException ex) { 
 						JOptionPane.showMessageDialog(null, "Please enter a number bigger or equal to 2!", "NumberFormatException",
 								JOptionPane.ERROR_MESSAGE);
@@ -332,13 +338,20 @@ public class ActualEditor extends JFrame {
 	 */
 	public void solveButtonActionPerformed(JMenuItem ji) {
 		if (hasMaze) {
-			if (!invokeSolving.isAlive()) { // if thread is not already running create new thread
+			if (!resizeMaze.isAlive() && !invokeGeneration.isAlive() && !invokeSolving.isAlive()) { // if thread is not already running create new thread
 				invokeSolving = new Thread(new InvokeSolving_Thread(ji.getName(), panel.getGraphics()));
 				invokeSolving.start();
 			} else { // if thread is already running interrupt it and start a new one
-				invokeSolving.interrupt();
-				invokeSolving = new Thread(new InvokeSolving_Thread(ji.getName(), panel.getGraphics()));
-				invokeSolving.start();
+				if (!invokeSolving.isAlive()) {
+					if (invokeGeneration.isAlive())
+						JOptionPane.showMessageDialog(this, "Wait while generation is in progress (you can interrupt generation by changing the size of the maze)", "Generation in progress", JOptionPane.ERROR_MESSAGE);
+					if (resizeMaze.isAlive())
+						JOptionPane.showMessageDialog(this, "Wait while the maze is being resized", "Resize in progress", JOptionPane.ERROR_MESSAGE);
+				} else {
+					invokeSolving.interrupt();
+					invokeSolving = new Thread(new InvokeSolving_Thread(ji.getName(), panel.getGraphics()));
+					invokeSolving.start();
+				}
 			}
 			setTitle("Editor.Editor: " + this.filename + " - unsaved work");
 			changed = true;
@@ -353,13 +366,20 @@ public class ActualEditor extends JFrame {
 	 * @param evt Action event
 	 */
 	public void generateButtonActionPerformed(ActionEvent evt) {
-		if (!invokeGeneration.isAlive()) { // if thread is not already running create new thread
+		if (!resizeMaze.isAlive() && !invokeGeneration.isAlive() && !invokeSolving.isAlive()) { // if thread is not already running create new thread
 			invokeGeneration = new Thread(new InvokeGenerate_Thread(panel.getGraphics(), DataHolder.genVis));
 			invokeGeneration.start();
 		} else { // if thread is already running interrupt it and start a new one
-			invokeGeneration.interrupt();
-			invokeGeneration = new Thread(new InvokeGenerate_Thread(panel.getGraphics(), DataHolder.genVis));
-			invokeGeneration.start();
+			if (!invokeGeneration.isAlive()) {
+				if (invokeSolving.isAlive())
+					JOptionPane.showMessageDialog(this, "Wait while solving is in progress (you can interrupt solving by changing the size of the maze)", "Solving in progress", JOptionPane.ERROR_MESSAGE);
+				if (resizeMaze.isAlive())
+					JOptionPane.showMessageDialog(this, "Wait while the maze is being resized", "Resize in progress", JOptionPane.ERROR_MESSAGE);
+			} else {
+				invokeGeneration.interrupt();
+				invokeGeneration = new Thread(new InvokeGenerate_Thread(panel.getGraphics(), DataHolder.genVis));
+				invokeGeneration.start();
+			}
 		}
 		changed = true;
 		hasMaze = true;
