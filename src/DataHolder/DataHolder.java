@@ -2,6 +2,8 @@ package DataHolder;
 
 import java.util.ArrayList;
 import java.util.Stack;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import Squares.Square;
 import Squares.SolvingSquare;
@@ -25,5 +27,7 @@ public class DataHolder {
 	public static boolean genVis = false; 
 	public static boolean solVis = false; // not yet implemented
 	public static boolean multiThreading = false; // not yet implemented
+	
+	public static ReadWriteLock rwl = new ReentrantReadWriteLock();
 
 }

@@ -19,9 +19,11 @@ class ImageFrame extends JPanel {
 	 */
 	@Override
 	protected void paintComponent(Graphics g) {
+		DataHolder.rwl.readLock().lock(); // Makes this code only runnable if no writeLock is declared
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, DataHolder.panelSize + 1, DataHolder.panelSize + 1);
 		Drawing.drawImage(g);
+		DataHolder.rwl.readLock().unlock();
 	}
 
 }

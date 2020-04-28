@@ -7,6 +7,7 @@ import javax.swing.JScrollPane;
 
 import ActualEditor.Drawing;
 import ProgramLogic.Logic;
+import DataHolder.DataHolder;
 
 public class Resize_Thread implements Runnable {
 	
@@ -35,8 +36,11 @@ public class Resize_Thread implements Runnable {
 		}
 		scrollPane.setViewportView(panel); // update the scroll pane 
 		
-		// still not working, i might just put it in mainthread again because fuck that
+		DataHolder.rwl.writeLock().lock(); // Declares a write lock so that other code that is
+										   // read locked can't be run
 		Logic.init(name, size); // create new file and squares in RAM
+		DataHolder.rwl.writeLock().unlock();
+		
 		Drawing.drawImage(panel.getGraphics());
 	}
 
