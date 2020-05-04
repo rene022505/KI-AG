@@ -22,6 +22,7 @@ public class InvokeSolving_Thread implements Runnable {
 	@Override
 	public void run() {
 		GeneralSolving.selectSolve(name, g, DataHolder.solVis); // Executes the selected solving method
+		DataHolder.ae.setTitle("Editor.Editor: " + name + " - unsaved work");
 	}
 
 }

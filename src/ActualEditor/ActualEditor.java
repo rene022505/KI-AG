@@ -24,7 +24,7 @@ public class ActualEditor extends JFrame {
 	public boolean hasMaze = false;
 
 	private boolean changed = false;
-	private String filename;
+	public String filename;
 
 	public JPanel panel = new ImageFrame();
 	
@@ -51,6 +51,8 @@ public class ActualEditor extends JFrame {
 		int x = (d.width - getSize().width) / 2;
 		int y = (d.height - getSize().height) / 2;
 		setLocation(x, y);
+		
+		DataHolder.ae = this;
 
 		// Parse filename for some eye candy
 		this.filename = pFilePath;
@@ -175,6 +177,7 @@ public class ActualEditor extends JFrame {
 							JOptionPane.showMessageDialog(null, "Please enter a number bigger or equal to 2!", "Input Error",
 									JOptionPane.ERROR_MESSAGE);
 						else {
+							setTitle(getTitle() + " | resizing...");
 							if (!resizeMaze.isAlive() && !invokeGeneration.isAlive() && !invokeSolving.isAlive()) { // if thread is not already running create new thread
 								resizeMaze = new Thread(new Resize_Thread(filename, newSize, panel, scrollPane));
 								resizeMaze.start();
@@ -191,7 +194,6 @@ public class ActualEditor extends JFrame {
 						}
 						hasMaze = false;
 						changed = true;
-						setTitle("Editor.Editor: " + filename + " - unsaved work");
 					} catch (NumberFormatException ex) { 
 						JOptionPane.showMessageDialog(null, "Please enter a number bigger or equal to 2!", "NumberFormatException",
 								JOptionPane.ERROR_MESSAGE);
@@ -324,11 +326,16 @@ public class ActualEditor extends JFrame {
 	 * @param evt Action event
 	 */
 	public void saveButtonActionPerformed(ActionEvent evt) {
-		if (changed) {
+		if (changed && !(invokeGeneration.isAlive() || invokeSolving.isAlive() || resizeMaze.isAlive())) {
 			Logic.save();
 			changed = false;
 			setTitle("Editor.Editor: " + this.filename);
-		}
+		} else if (invokeGeneration.isAlive())
+				JOptionPane.showMessageDialog(this, "Wait while generation is in progress (you can interrupt generation by changing the size of the maze)", "Generation in progress", JOptionPane.ERROR_MESSAGE);
+		else if (resizeMaze.isAlive())
+				JOptionPane.showMessageDialog(this, "Wait while the maze is being resized", "Resize in progress", JOptionPane.ERROR_MESSAGE);
+		else 
+			JOptionPane.showMessageDialog(this, "Wait while solving is in progress (you can interrupt solving by changing the size of the maze)", "Solving in progress", JOptionPane.ERROR_MESSAGE);
 	}
 
 	/**
@@ -339,6 +346,7 @@ public class ActualEditor extends JFrame {
 	public void solveButtonActionPerformed(JMenuItem ji) {
 		if (hasMaze) {
 			if (!resizeMaze.isAlive() && !invokeGeneration.isAlive() && !invokeSolving.isAlive()) { // if thread is not already running create new thread
+				DataHolder.ae.setTitle(DataHolder.ae.getTitle() + " | solving...");
 				invokeSolving = new Thread(new InvokeSolving_Thread(ji.getName(), panel.getGraphics()));
 				invokeSolving.start();
 			} else { // if thread is already running interrupt it and start a new one
@@ -348,12 +356,12 @@ public class ActualEditor extends JFrame {
 					if (resizeMaze.isAlive())
 						JOptionPane.showMessageDialog(this, "Wait while the maze is being resized", "Resize in progress", JOptionPane.ERROR_MESSAGE);
 				} else {
+					DataHolder.ae.setTitle(DataHolder.ae.getTitle() + " | solving...");
 					invokeSolving.interrupt();
 					invokeSolving = new Thread(new InvokeSolving_Thread(ji.getName(), panel.getGraphics()));
 					invokeSolving.start();
 				}
 			}
-			setTitle("Editor.Editor: " + this.filename + " - unsaved work");
 			changed = true;
 		}
 		else
@@ -367,6 +375,7 @@ public class ActualEditor extends JFrame {
 	 */
 	public void generateButtonActionPerformed(ActionEvent evt) {
 		if (!resizeMaze.isAlive() && !invokeGeneration.isAlive() && !invokeSolving.isAlive()) { // if thread is not already running create new thread
+			DataHolder.ae.setTitle(DataHolder.ae.getTitle() + " | generating...");
 			invokeGeneration = new Thread(new InvokeGenerate_Thread(panel.getGraphics(), DataHolder.genVis));
 			invokeGeneration.start();
 		} else { // if thread is already running interrupt it and start a new one
@@ -376,6 +385,7 @@ public class ActualEditor extends JFrame {
 				if (resizeMaze.isAlive())
 					JOptionPane.showMessageDialog(this, "Wait while the maze is being resized", "Resize in progress", JOptionPane.ERROR_MESSAGE);
 			} else {
+				DataHolder.ae.setTitle(DataHolder.ae.getTitle() + " | generating...");
 				invokeGeneration.interrupt();
 				invokeGeneration = new Thread(new InvokeGenerate_Thread(panel.getGraphics(), DataHolder.genVis));
 				invokeGeneration.start();
@@ -383,7 +393,6 @@ public class ActualEditor extends JFrame {
 		}
 		changed = true;
 		hasMaze = true;
-		setTitle("Editor.Editor: " + this.filename + " - unsaved work");
 	}
 
 	/**
@@ -414,8 +423,6 @@ public class ActualEditor extends JFrame {
 			case 2:
 				return WindowConstants.DO_NOTHING_ON_CLOSE;
 			default:
-				JOptionPane.showMessageDialog(this, "Something happened and I don't know what...", "?!?!?",
-						JOptionPane.ERROR_MESSAGE);
 				return WindowConstants.DO_NOTHING_ON_CLOSE;
 			}
 	}

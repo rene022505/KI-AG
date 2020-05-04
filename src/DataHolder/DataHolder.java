@@ -5,6 +5,7 @@ import java.util.Stack;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import ActualEditor.ActualEditor;
 import Squares.Square;
 import Squares.SolvingSquare;
 
@@ -30,4 +31,5 @@ public class DataHolder {
 	
 	public static ReadWriteLock rwl = new ReentrantReadWriteLock();
 
+	public static ActualEditor ae;
 }

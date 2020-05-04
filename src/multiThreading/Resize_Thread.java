@@ -29,19 +29,19 @@ public class Resize_Thread implements Runnable {
 
 	@Override
 	public void run() {		
-		if (size > 70) { // change the panels size depending on the grid size
+		if (size > 70) // change the panels size depending on the grid size
 			panel.setPreferredSize(new Dimension(size * 10 + 1, size * 10 + 1)); 
-		} else {
+		else
 			panel.setPreferredSize(new Dimension(701, 701));
-		}
 		scrollPane.setViewportView(panel); // update the scroll pane 
 		
-		DataHolder.rwl.writeLock().lock(); // Declares a write lock so that other code that is
-										   // read locked can't be run
+		// Declares a write lock so that other code that is read locked can't be run
+		DataHolder.rwl.writeLock().lock(); 
 		Logic.init(name, size); // create new file and squares in RAM
 		DataHolder.rwl.writeLock().unlock();
 		
 		Drawing.drawImage(panel.getGraphics());
+		DataHolder.ae.setTitle("Editor.Editor: " + name + " - unsaved work");
 	}
 
 }
